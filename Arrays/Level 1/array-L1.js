@@ -1,13 +1,9 @@
-
-
 // Ignore this function
 //
-if(!Array.prototype.equals) {
-
+if (!Array.prototype.equals) {
   // attach the .equals method to Array's prototype to call it on any array
   //
-  Array.prototype.equals = function (array) {
-
+  Array.prototype.equals = function(array) {
     // if the other array is a falsy value, return
     //
     if (!array) {
@@ -21,18 +17,15 @@ if(!Array.prototype.equals) {
     }
 
     for (var i = 0, l = this.length; i < l; i++) {
-
       // Check if we have nested arrays
       //
       if (this[i] instanceof Array && array[i] instanceof Array) {
-
         // recurse into the nested arrays
         //
         if (!this[i].equals(array[i])) {
           return false;
         }
-      }
-      else if (this[i] != array[i]) {
+      } else if (this[i] != array[i]) {
         // Warning - two different object instances will never be equal: {x:20} != {x:20}
         //
         return false;
@@ -43,11 +36,10 @@ if(!Array.prototype.equals) {
 
   // Hide method from for-in loops
   //
-  Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+  Object.defineProperty(Array.prototype, 'equals', { enumerable: false });
 }
 //
 // Ignore that fuction
-
 
 /*
   Arrays are efficient for random access.  They are also the most common data structure,
@@ -73,8 +65,6 @@ if(!Array.prototype.equals) {
 
 */
 
-
-
 // 1. [ ] Fill any array with value, zero if none provided, return original array
 //
 //
@@ -91,13 +81,12 @@ var z = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 function fillArray(a, value) {
   value = value || 0;
-
   // fill it
+  for (let i = 0; i < a.length; i++) {
+    a[i] = value;
+  }
+  return a;
 }
-
-
-
-
 
 // 2. [ ] Return the sum of all values in any array
 //
@@ -108,12 +97,13 @@ function fillArray(a, value) {
 var a = [1, 2, 3, 4, 5, 6, 7, 8];
 
 function sum(a) {
+  let total = 0;
+  for (let i = 0; i < a.length; i++) {
+    total += a[i];
+  }
   // Return sum
+  return total;
 }
-
-
-
-
 
 // 3. [ ] Return the average value of any array
 //
@@ -123,12 +113,13 @@ function sum(a) {
 var a1 = [23, 17, 23, 42, 8, 2, 73, 101, 83, 92];
 
 function average(a) {
+  let total = 0;
+  for (var i = 0; i < a.length; i++) {
+    total += a[i];
+  }
+  return total / a.length;
   // return average
 }
-
-
-
-
 
 //  4. [ ] Return the median of any array that has both an odd and even number of values
 //
@@ -138,17 +129,37 @@ function average(a) {
 //
 //  https://en.wikipedia.org/wiki/Median
 //
-var a2 = [1,2,4,4,6,7,8,9,12];
-var a3 = [4,5,9,10,11,15,22,20,21,21];
+var a2 = [1, 2, 4, 4, 6, 7, 8, 9, 12];
+var a3 = [4, 5, 9, 10, 11, 15, 22, 20, 21, 21];
 var a0 = [10.1, 9.99, 12.32, 17.86, 9.1, 0];
+
+// function median(a) {
+//   let median;
+//   for(let i = 0; i < a.length; i++) {
+//     if(a.length % 2 === 0) {
+//       // even
+//       median = (a[a.length/2] + a[a.length/2 - 1]) / 2;
+//     } else {
+//       // odd
+//       median = a[Math.floor(a.length/2)];
+//     }
+//   }
+//   // return median
+//   return median;
+// }
+
+// no computation > fewer computations > (more of) addition > sub > multiplication > div > mod
 
 function median(a) {
   // return median
+  var midpoint = a.length / 2;
+
+  if (a.length % 2 !== 0) {
+    return a[Math.floor(midpoint)];
+  }
+
+  return (a[midpoint - 1] + a[midpoint]) / 2;
 }
-
-
-
-
 
 // 5. Return the index the value specified, or null if not found
 //
@@ -157,15 +168,17 @@ function median(a) {
 //   of the value if its found and null if it is not.  Use the array `a4` as
 //   test input.
 //
-var a4 = ["zero", "one", "two", "three", "four", "five"];
+var a4 = ['zero', 'one', 'two', 'three', 'four', 'five'];
 
 function findIndex(a, value) {
+  for (let i = 0; i < a.length; i++) {
+    if (value === a[i]) {
+      return i;
+    }
+  }
+  return null;
   // return index or null
 }
-
-
-
-
 
 // 6. [ ] Return index of nth last odd in any array, 1 being the fist, etc., null = not found
 //     [ ] Use only a single iteration
@@ -178,12 +191,18 @@ function findIndex(a, value) {
 var a5 = [4, 3, 8, 8, 6, 9, 10, 12, 10, 9, 0, 5, 16, 2];
 
 function findNthLastOdd(a, n) {
+  let nth = 0;
+  for (let i = a.length - 1; i >= 0; i--) {
+    if (a[i] % 2 === 1) {
+      nth += 1;
+      if (nth === n) {
+        return i;
+      }
+    }
+  }
+  return null;
   // return nth last add
 }
-
-
-
-
 
 // 7. [ ] Select a range of values in any array, return the average of the values of the range
 //
@@ -193,12 +212,14 @@ function findNthLastOdd(a, n) {
 var a6 = [0, 1, 2, 3, 4, 5, 10, 15, 23, 54, 22, 1, 8, 4, 2, 2, 2, 0, 1];
 
 function getAverageOfRange(a, start, end) {
+  let arr = [];
+  let pos = 0;
+  for (let i = start, j = 0; i <= end; i++) {
+    arr[pos++] = a[i];
+  }
+  return average(arr);
   // return average of values selected from a subarray
 }
-
-
-
-
 
 // 8. [ ] Copy contents of one array to another.  Do not use any built-in functions.
 //
@@ -210,13 +231,12 @@ var b7 = [];
 
 function copyArray(source, target) {
   target = target || [];
-
+  for (let i = 0; i < source.length; i++) {
+    target[i] = source[i];
+  }
   // Copy it
+  return target;
 }
-
-
-
-
 
 // 9. [ ] Swap two elements in an array.  Do not use any built-in functions.
 //
@@ -225,37 +245,52 @@ function copyArray(source, target) {
 //
 var a8 = [1, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37];
 
+// function swap(a, indexSource, indexTarget) {
+//   // Swap it
+//   let temp = a[indexTarget];
+//   a[indexTarget] = a[indexSource];
+//   a[indexSource] = temp;
+//   return a;
+// }
+
 function swap(a, indexSource, indexTarget) {
   // Swap it
+  [a[indexSource], a[indexTarget]] = [a[indexTarget], a[indexSource]];
+  return a;
 }
-
-
-
-
 
 var test = testRunner(10);
 test(true, function() {
   test(true, function() {
-    console.log("fillArray...");
-    console.log("  fillArray(z) should be all zeros: " + (fillArray(z).equals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])));
-    console.log("  fillArray(z, 5) should be all 5's: " + (fillArray(z, 5).equals([5, 5, 5, 5, 5, 5, 5, 5, 5, 5])));
+    console.log('fillArray...');
+    console.log(
+      '  fillArray(z) should be all zeros: ' +
+        fillArray(z).equals([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+    );
+    console.log(
+      "  fillArray(z, 5) should be all 5's: " +
+        fillArray(z, 5).equals([5, 5, 5, 5, 5, 5, 5, 5, 5, 5])
+    );
   });
 
   test(true, function() {
-    console.log("sum...");
-    console.log("  sum(a) should be 36: " + (sum(a) === 36));
+    console.log('sum...');
+    console.log('  sum(a) should be 36: ' + (sum(a) === 36));
   });
 
   test(true, function() {
-    console.log("average...");
-    console.log("  average(a1) should be 46.4: " + (average(a1) === 46.4));
+    console.log('average...');
+    console.log('  average(a1) should be 46.4: ' + (average(a1) === 46.4));
   });
 
   test(true, function() {
-    console.log("median...");
-    console.log("  median(a2) should be 6: " + (median(a2) === 6));
-    console.log("  median(a3) should be 13: " + (median(a3) === 13));
-    console.log("  median(a0) should be 10.045: " + (median(a0.sort(numberSort)) === 10.045));
+    console.log('median...');
+    console.log('  median(a2) should be 6: ' + (median(a2) === 6));
+    console.log('  median(a3) should be 13: ' + (median(a3) === 13));
+    console.log(
+      '  median(a0) should be 10.045: ' +
+        (median(a0.sort(numberSort)) === 10.045)
+    );
 
     function numberSort(a, b) {
       return a - b;
@@ -263,47 +298,66 @@ test(true, function() {
   });
 
   test(true, function() {
-    console.log("findIndex...");
-    console.log("  findIndex('three') should be 3: " + (findIndex(a4, "three") === 3));
-    console.log("  findIndex('nine') should be null: " + (findIndex(a4, "nine") === null));
+    console.log('findIndex...');
+    console.log(
+      "  findIndex('three') should be 3: " + (findIndex(a4, 'three') === 3)
+    );
+    console.log(
+      "  findIndex('nine') should be null: " + (findIndex(a4, 'nine') === null)
+    );
   });
 
   test(true, function() {
-    console.log("findNthLastOdd...");
-    console.log("  findNthLastOdd(a5, 1) should be 11: " + (findNthLastOdd(a5, 1) === 11));
-    console.log("  findNthLastOdd(a5, 2) should be 9: " + (findNthLastOdd(a5, 2) === 9));
-    console.log("  findNthLastOdd(a5, 4) should be 1: " + (findNthLastOdd(a5, 4) === 1));
-    console.log("  findNthLastOdd(a5, 18) should be null: " + (findNthLastOdd(a5, 18) === null));
+    console.log('findNthLastOdd...');
+    console.log(
+      '  findNthLastOdd(a5, 1) should be 11: ' + (findNthLastOdd(a5, 1) === 11)
+    );
+    console.log(
+      '  findNthLastOdd(a5, 2) should be 9: ' + (findNthLastOdd(a5, 2) === 9)
+    );
+    console.log(
+      '  findNthLastOdd(a5, 4) should be 1: ' + (findNthLastOdd(a5, 4) === 1)
+    );
+    console.log(
+      '  findNthLastOdd(a5, 18) should be null: ' +
+        (findNthLastOdd(a5, 18) === null)
+    );
   });
 
   test(true, function() {
-    console.log("getAverageOfRange...");
-    console.log("  getAverageOfRange(a6, 5, 9) should be 21.4: " + (getAverageOfRange(a6, 5, 9) === 21.4));
+    console.log('getAverageOfRange...');
+    console.log(
+      '  getAverageOfRange(a6, 5, 9) should be 21.4: ' +
+        (getAverageOfRange(a6, 5, 9) === 21.4)
+    );
   });
 
   test(true, function() {
-    console.log("copyArray...");
-    console.log("  copyArray(a7) should return [0, 10, 20, 30, 35, 55, 75, 100]: " + (copyArray(a7, b7).equals(a7)));
-    console.log("  b7 should not be empty: " + (b7.length > 0));
-    console.log("  b7 should be same as a7: " + (b7.equals(a7)));
+    console.log('copyArray...');
+    console.log(
+      '  copyArray(a7) should return [0, 10, 20, 30, 35, 55, 75, 100]: ' +
+        copyArray(a7, b7).equals(a7)
+    );
+    console.log('  b7 should not be empty: ' + (b7.length > 0));
+    console.log('  b7 should be same as a7: ' + b7.equals(a7));
   });
 
   test(true, function() {
-    console.log("swap...");
-    console.log("  swap(a8, 1, 11) should have swapped: " + (swap(a8, 1, 11).equals([1, 31, 3, 5, 7, 11, 13, 17, 19, 23, 29, 2, 37])));
+    console.log('swap...');
+    console.log(
+      '  swap(a8, 1, 11) should have swapped: ' +
+        swap(a8, 1, 11).equals([1, 31, 3, 5, 7, 11, 13, 17, 19, 23, 29, 2, 37])
+    );
   });
 });
 
-
-
 test(true, null);
-
 
 function testRunner(totalTests) {
   totalTests -= 1; // remove one for the main test runner
   var count = -1;
 
-  return function (go, test) {
+  return function(go, test) {
     if (!go) {
       return;
     }
@@ -311,18 +365,17 @@ function testRunner(totalTests) {
     if (test != null) {
       count += 1;
       test();
-    }
-    else {
-      console.log("");
-      console.log("");
+    } else {
+      console.log('');
+      console.log('');
 
       if (count === totalTests) {
-        console.log("All tests were executed.");
-      }
-      else {
-        console.log((totalTests - count) + " of " + totalTests + " tests were not executed.");
+        console.log('All tests were executed.');
+      } else {
+        console.log(
+          totalTests - count + ' of ' + totalTests + ' tests were not executed.'
+        );
       }
     }
-  }
+  };
 }
-
