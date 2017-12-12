@@ -92,13 +92,26 @@ var Vector = function(initialCapacity, maxCapacity) {
 };
 
 Vector.prototype.insert = function(index, value) {
-  // ...
+  this.resize('add');
+  // move items from index to the end to the right;
+  let temp;
+  for (let i = this.length; i >= index; i--) {
+    if (this.storage[i] !== undefined) {
+      this.storage[i + 1] = this.storage[i];
+    } else {
+      continue;
+    }
+    if (index === i) {
+      this.storage[i] = value;
+      this.length++;
+    }
+  }
 };
 
 Vector.prototype.add = function(value) {
   //
   if (this.length >= this.capacity) {
-    this.resize();
+    this.resize('add');
   }
   this.storage[this.length++] = value;
   //
@@ -106,6 +119,11 @@ Vector.prototype.add = function(value) {
 
 Vector.prototype.remove = function(index) {
   // ...
+  if (this.length <= this.capacity / 2) {
+    this.resize('remove');
+  }
+  this.storage[index] = undefined;
+  
 };
 
 Vector.prototype.get = function(index) {
@@ -116,20 +134,17 @@ Vector.prototype.set = function(index, value) {
   this.storage[index] = value;
 };
 
-Vector.prototype.resize = function(direction, desiredStorage) {
-  // check whether to half or doubl
+Vector.prototype.resize = function(direction) {
+  let tempStorage;
+  // check whether to half or double
   if (direction === 'add') {
     // check within max
-    if (this.length >= this.capacity) {
-      this.capacity *= 2;
-      var tempStorage = new Array(this.capacity);
-    }
+    this.capacity *= 2;
+    tempStorage = new Array(this.capacity);
   } else if (direction === 'remove') {
     // check above min
-    if (this.length <= Math.floor(this.capacity / 2)) {
-      this.capacity /= 2;
-      var tempStorage = new Array(this.capacity);
-    }
+    this.capacity /= 2;
+    tempStorage = new Array(this.capacity);
   }
   for (var i = 0; i < this.storage.length; i++) {
     tempStorage[i] = this.storage[i];
@@ -235,7 +250,7 @@ test(true, function() {
     );
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('Remove v[2]');
     v.remove(2);
     console.log(
@@ -244,7 +259,7 @@ test(true, function() {
     );
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('Remove the first');
     v.remove(0);
     console.log(
@@ -255,7 +270,7 @@ test(true, function() {
     console.log('  v.capacity should be 8: ' + (v.capacity === 8));
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('Insert one at the beginning');
     v.insert(0, 0);
     console.log(
@@ -264,7 +279,7 @@ test(true, function() {
     );
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('Remove from beginning');
     v.remove(0);
     console.log(
@@ -275,7 +290,7 @@ test(true, function() {
 
   v = new Vector();
 
-  test(false, function() {
+  test(true, function() {
     console.log(
       'Test inserting <capacity> items leaves the storage size at <capacity>'
     );
@@ -288,7 +303,7 @@ test(true, function() {
     );
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('  Add 6');
     v.add(0);
     v.add(1);
