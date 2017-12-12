@@ -91,7 +91,7 @@ if(!Array.prototype.equals) {
 
 */
 
-var Vector = function(initialCapacity, maxCapacity) {
+var Vector = function(initialCapacity) {
   this.capacity = initialCapacity || 8;   // Default array size initially to 8 elements
   this.length = 0;
 
@@ -153,14 +153,14 @@ var test = testRunner(19);
 test(true, function() {
   var v = new Vector();
 
-  test(false, function() {
+  test(true, function() {
     console.log("Initialize");
     console.log("  v.length should be 0: " + (v.length === 0));
     console.log("  v.capacity should be 8: " + (v.capacity === 8));
     console.log("  v.storage should be [undefined, ... x8]: " + (v.storage.length === v.capacity));
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log("Add 3");
     v.add(0);
     v.add(1);
