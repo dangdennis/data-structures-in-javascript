@@ -55,15 +55,15 @@ if (!Array.prototype.equals) {
 
   Complete the following:
 
-   1. [ ] .resize() must double or half the storage as-needed.  When halving, you can use the formula
+   1. [x] .resize() must double or half the storage as-needed.  When halving, you can use the formula
            (floor(maxCapacity / 2).  IDEA: It might be better to supply an argument that indicates
            the desired storage size, and whether its an add() or remove() operation requesting it.
            Or not.  It's up to you.
-      [ ] Don't expand beyond maxCapacity or below minCapacity.
+      [x] Don't expand beyond maxCapacity or below minCapacity.
 
-   2. [ ] .add() re-implement with no built-in function calls.  Resize if necessary.
-      [ ] .insert() re-implement with no built-in function calls.  Resize if necessary.
-      [ ] .remove() re-implement with no built-in function calls.  Resize if necessary.
+   2. [x] .add() re-implement with no built-in function calls.  Resize if necessary.
+      [x] .insert() re-implement with no built-in function calls.  Resize if necessary.
+      [x] .remove() re-implement with no built-in function calls.  Resize if necessary.
 
 
   BONUS: Only complete this after the others.
@@ -92,8 +92,9 @@ var Vector = function(initialCapacity, maxCapacity) {
 };
 
 Vector.prototype.insert = function(index, value) {
-  this.resize('add');
-  // move items from index to the end to the right;
+  if (this.length >= this.capacity) {
+    this.resize('add');
+  }
   let temp;
   for (let i = this.length; i >= index; i--) {
     if (this.storage[i] !== undefined) {
@@ -104,26 +105,37 @@ Vector.prototype.insert = function(index, value) {
     if (index === i) {
       this.storage[i] = value;
       this.length++;
+      return;
     }
   }
 };
 
 Vector.prototype.add = function(value) {
-  //
+  if (isNaN(value)) {
+    return;
+  }
   if (this.length >= this.capacity) {
     this.resize('add');
   }
   this.storage[this.length++] = value;
-  //
 };
 
 Vector.prototype.remove = function(index) {
-  // ...
+  if (!index && index !== 0) {
+    this.storage[this.length - 1] = undefined;
+    this.length--;
+  }
   if (this.length <= this.capacity / 2) {
     this.resize('remove');
   }
+  if (!index && index !== 0) return;
   this.storage[index] = undefined;
-  
+  for (let i = index + 1; i < this.storage.length; i++) {
+    if (this.storage[i] !== undefined) {
+      this.storage[i - 1] = this.storage[i];
+    }
+  }
+  this.length--;
 };
 
 Vector.prototype.get = function(index) {
@@ -135,18 +147,24 @@ Vector.prototype.set = function(index, value) {
 };
 
 Vector.prototype.resize = function(direction) {
+  if (!direction) {
+    return;
+  }
   let tempStorage;
-  // check whether to half or double
   if (direction === 'add') {
-    // check within max
+    if (this.capacity * 2 > this.maxCapacity) {
+      return;
+    }
     this.capacity *= 2;
     tempStorage = new Array(this.capacity);
   } else if (direction === 'remove') {
-    // check above min
+    if (this.capacity / 2 < this.minCapacity) {
+      return;
+    }
     this.capacity /= 2;
     tempStorage = new Array(this.capacity);
   }
-  for (var i = 0; i < this.storage.length; i++) {
+  for (var i = 0; i < this.capacity; i++) {
     tempStorage[i] = this.storage[i];
   }
 
@@ -155,11 +173,9 @@ Vector.prototype.resize = function(direction) {
 
 Vector.prototype.toArray = function() {
   var result = [];
-
   for (var i = 0; i < this.length; i++) {
     result[i] = this.storage[i];
   }
-
   return result;
 };
 
@@ -273,6 +289,7 @@ test(true, function() {
   test(true, function() {
     console.log('Insert one at the beginning');
     v.insert(0, 0);
+    
     console.log(
       '  Insert 0 at v[0] should be [0, 1, 3, 4, 5, 6, 7]: ' +
         v.toArray().equals([0, 1, 3, 4, 5, 6, 7])
@@ -318,7 +335,7 @@ test(true, function() {
     );
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('  Insert 1');
     v.insert(1, 6);
     console.log(
@@ -327,7 +344,7 @@ test(true, function() {
     );
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('  Insert 1 More');
     v.insert(1, 7);
     console.log('    v.length should be 8: ' + (v.length === 8));
@@ -340,7 +357,7 @@ test(true, function() {
     );
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('  Insert 1 Beyond Initial Capactity of 8');
     v.insert(6, 8);
     console.log('    v.length should be 9: ' + (v.length === 9));
@@ -353,7 +370,7 @@ test(true, function() {
     );
   });
 
-  test(false, function() {
+  test(true, function() {
     console.log('Test removing to half capacity reduces storage to half');
     v.remove();
     console.log(
