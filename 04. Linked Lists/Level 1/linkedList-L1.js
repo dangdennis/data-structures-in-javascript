@@ -67,6 +67,7 @@ if(!Array.prototype.equals) {
    following:
 
     [x] Implement a LinkedListNode object
+    [ ] Define head and tail variables
     [ ] .add() function to add a node to the current and return the new node
     [ ] .findPrevious() function to return the previous node (null if none)
     [ ] .find() function to return an object representing the node containing the next occurrence
