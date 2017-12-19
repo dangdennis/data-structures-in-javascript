@@ -42,43 +42,38 @@ if (!Array.prototype.equals) {
 // Ignore that function
 
 /*
-  Previously, in L1 you enhanced a partially written vector to resize and maintain an accurate length.
-   You may have noticed that the .add(), .insert(), and .remove() functions used built-in functions
-   to add and remove data to the storage array, even though you were asked not to use any built-in
-   functions yourself.  That is okay, it was done that way to help you focus only on the critical
-   details necessary to learn the self-adjusting array concept.
+  Previously, in L1 you enhanced a partially written vector to resize and maintain an accurate length. You may have noticed that the .add(), .insert(), and .remove() functions used built-in functions to add and remove data to the storage array, even though you were asked not to use any built-in functions yourself.  That is okay, it was done that way to help you focus only on the critical details necessary to learn the self-adjusting array concept.
 
   Your new objective is to re-implement the .add(), .insert(), and .remove() functions from scratch,
-   without using any build-in functions.  You can use your previous implementation as reference.
-   We've partially implemented a .resize() function.  You'll also change it to either increase the
-   storage capacity, or decrease it depending on the operation.
+  without using any build-in functions.  You can use your previous implementation as reference.
+  We've partially implemented a .resize() function.  You'll also change it to either increase the
+  storage capacity, or decrease it depending on the operation.
 
   Complete the following:
 
-   1. [x] .resize() must double or half the storage as-needed.  When halving, you can use the formula
-           (floor(maxCapacity / 2).  IDEA: It might be better to supply an argument that indicates
-           the desired storage size, and whether its an add() or remove() operation requesting it.
-           Or not.  It's up to you.
+  1. [x] .resize() must double or half the storage as-needed.  When halving, you can use the formula
+          (floor(maxCapacity / 2).  IDEA: It might be better to supply an argument that indicates
+          the desired storage size, and whether its an add() or remove() operation requesting it.
+          Or not.  It's up to you.
       [x] Don't expand beyond maxCapacity or below minCapacity.
 
-   2. [x] .add() re-implement with no built-in function calls.  Resize if necessary.
+  2.  [x] .add() re-implement with no built-in function calls.  Resize if necessary.
       [x] .insert() re-implement with no built-in function calls.  Resize if necessary.
       [x] .remove() re-implement with no built-in function calls.  Resize if necessary.
 
 
   BONUS: Only complete this after the others.
 
-   3. [ ] After adding (capacity - 1) items, log the v.storage array.  Also the v.toArray().  Observe
-           the differences.
-      [ ] Add a couple more items, and log them again and observe.
-      [ ] Remove a few until (capacity - 3).  Log them again and observe.
-      [ ] Be able to explain why they do not match.
-      [ ] Be able to explain why that is okay.
+  3. [X] After adding (capacity - 1) items, log the v.storage array. Also the v.toArray(). Observe the differences. Answer: You remove the undefined items aka extra space after toArray();
+    [X] Add a couple more items, and log them again and observe.
+    [ ] Remove a few until (capacity - 3).  Log them again and observe.
+    [ ] Be able to explain why they do not match. Confused here. 
+    [ ] Be able to explain why that is okay.
 
-  NOTE: Try to re-use functions when possible, don't repeat yourself (DRY)
-  NOTE: Don't worry about edge-cases, error checking, or bounds checking
-  NOTE: There shouldn't be any built-in functions in when completed
-  NOTE: Satisfy all the tests.  Do not modify or comment of them out
+NOTE: Try to re-use functions when possible, don't repeat yourself (DRY)
+NOTE: Don't worry about edge-cases, error checking, or bounds checking
+NOTE: There shouldn't be any built-in functions in when completed
+NOTE: Satisfy all the tests.  Do not modify or comment of them out
 
 */
 
@@ -199,9 +194,19 @@ test(true, function() {
     v.add(1);
     v.add(2);
     console.log('  v.length should be 3: ' + (v.length === 3));
+    console.log("STORAGE AFTER ADDING",v.storage);
+    console.log("STORAGE AFTER toARRAY",v.toArray())
+    v.add(1);
+    v.add(2);
+    console.log("STORAGE AFTER MORE ADDING",v.storage);
+    console.log("STORAGE AFTER MORE toARRAY",v.toArray())
     console.log(
       '  v.toArray() should be [0, 1, 2]: ' + v.toArray().equals([0, 1, 2])
     );
+    v.remove()
+    v.remove()
+    console.log("STORAGE AFTER REMOVING",v.storage);
+    console.log("STORAGE AFTER REMOVING toARRAY",v.toArray())
   });
 
   test(true, function() {
