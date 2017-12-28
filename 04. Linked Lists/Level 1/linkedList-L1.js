@@ -94,13 +94,63 @@ var LinkedListNode = function(data, next) {
   this.next = next || null;
 };
 
-function insertAtHead(startingNode) {}
-function insertMiddle() {}
-function insertAtTail() {}
+function reverseLinkedList(start) {
+  var prev = null;
+  var curr = start;
+  var last = start;
 
-function removeAtHead() {}
-function removeMiddle() {}
-function removeAtTail() {}
+  while (curr != null) {
+    var next = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = next;
+  }
+
+  head = prev;
+  tail = last;
+}
+
+function removeDuplicates(startingNode, value) {
+  var prev = null;
+  var current = startingNode;
+  var head = startingNode;
+  var found = false;
+
+  while (current != null) {
+    // Head
+    //
+    if (prev === null && current.data === value) {
+      if (found) {
+        head = current.next;
+        current = current.next;
+      } else {
+        found = true;
+
+        prev = current;
+        current = current.next;
+      }
+    } else {
+      // Middle
+      //
+      if (current.data == value) {
+        if (found) {
+          prev.next = current.next;
+          current = prev.next;
+        } else {
+          found = true;
+
+          prev = current;
+          current = current.next;
+        }
+      } else {
+        prev = current;
+        current = current.next;
+      }
+    }
+  }
+
+  return head;
+}
 
 function add(node, data) {
   var newNode = new LinkedListNode(data);
@@ -115,32 +165,43 @@ function add(node, data) {
 }
 
 function remove(fromWhichNode, node) {
-  var previous = head;
-  var currentNode = head;
-  while (currentNode) {
-    if (currentNode === node) {
-      if (currentNode === head) {
-        head = head.next;
-      }
-      if (currentNode === tail) {
-        tail = previous;
-      }
-      // tracking previous
-      previous.next = currentNode.next;
-    } else {
-      previous = currentNode;
-    }
-    currentNode = currentNode.next;
+  // find previous
+  var prev = findPrevious(fromWhichNode, node);
+  var current = fromWhichNode;
+
+  // removing the last node
+  if ((prev === null) & (node.next === null)) {
+    head = tail = null;
+    return;
   }
+
+  // removing from the head
+  if (prev === null) {
+    console.log("prev === null");
+    head = head.next;
+    return;
+  }
+
+  // removing from the tail
+  if (node === tail) {
+    console.log("node === tail");
+    prev.next = null;
+    tail = prev;
+    return;
+  }
+
+  // removing anywhere else in the middle
+  console.log("end of the function");
+  prev.next = node.next;
 }
 
 function find(fromWhichNode, data) {
   var result = { node: null, prev: null };
   var previous = null;
   var currentNode = head;
-  
-  while(currentNode) {
-    if(currentNode.data === data) {
+
+  while (currentNode) {
+    if (currentNode.data === data) {
       result.prev = previous;
       result.node = currentNode;
       return result;
@@ -171,7 +232,6 @@ function toArray(fromWhichNode) {
     result.push(currentNode.data);
     currentNode = currentNode.next;
   }
-  console.log(JSON.stringify(head));
   return result;
 }
 
@@ -181,6 +241,54 @@ function toArray(fromWhichNode) {
     var test_result = false;
 
     test(true, function() {
+      console.log("Removing duplicates");
+      ll2 = new LinkedListNode(0);
+
+      head = ll2;
+      tail = ll2;
+
+      var n1 = add(head, 1);
+      // tail = n1
+      var n2 = add(head, 1);
+      // tail = n2;
+      var n3 = add(head, 3);
+      // tail = n3;
+      var n4 = add(head, 4);
+      // tail = n4;
+      var n5 = add(head, 1);
+      // tail = n5;
+      console.log("pre duplicates removed TOARRAY", toArray(head));
+
+      console.log(
+        "Expect removed-duplicates linked list: removeDuplicates(head,1) === [1,3,4]",
+        removeDuplicates(head, 1).equals([1, 3, 4])
+      );
+    });
+
+    test(false, function() {
+      console.log("Reversing linked list");
+      ll2 = new LinkedListNode(0);
+
+      head = ll2;
+      tail = ll2;
+
+      var n1 = add(head, 1);
+      // tail = n1
+      var n2 = add(head, 2);
+      // tail = n2;
+      var n3 = add(head, 3);
+      // tail = n3;
+      var n4 = add(head, 4);
+      // tail = n4;
+      console.log("pre reverse linkedlist TOARRAY", toArray(head));
+
+      console.log(
+        "Expect reversed linked list: reverse(head) === [4,3,2,1,0]",
+        reverseLinkedList(head).equals([4, 3, 2, 1, 0])
+      );
+    });
+
+    test(false, function() {
       console.log("Preliminaries");
       try {
         test_result = head === (null || undefined);
@@ -191,7 +299,7 @@ function toArray(fromWhichNode) {
       }
     });
 
-    test(true, function() {
+    test(false, function() {
       try {
         test_result = tail === (null || undefined);
       } catch (e) {
@@ -203,7 +311,7 @@ function toArray(fromWhichNode) {
 
     var ll = null;
 
-    test(true, function() {
+    test(false, function() {
       console.log("First Node");
       ll = new LinkedListNode(0, null);
       head = ll;
@@ -218,7 +326,7 @@ function toArray(fromWhichNode) {
       n3,
       n4 = null;
 
-    test(true, function() {
+    test(false, function() {
       console.log("Add some nodes to the end");
       n1 = add(tail, 1);
       tail = n1;
@@ -236,7 +344,7 @@ function toArray(fromWhichNode) {
 
     var nx = new LinkedListNode(0, null);
 
-    test(true, function() {
+    test(false, function() {
       console.log("Searching");
       console.log(
         "  findPrevious(head, ll) should return null: " +
@@ -269,7 +377,7 @@ function toArray(fromWhichNode) {
       );
     });
 
-    test(true, function() {
+    test(false, function() {
       console.log("Removing");
       remove(head, ll);
       console.log(
@@ -277,6 +385,7 @@ function toArray(fromWhichNode) {
           toArray(head).equals([1, 2, 3, 4])
       );
       remove(head, n2);
+      console.log("LINKED LIST---:", toArray(head));
       console.log(
         "  remove(head, 2) should return [1, 3, 4]: " +
           toArray(head).equals([1, 3, 4])
