@@ -36,7 +36,7 @@ if (!Array.prototype.equals) {
 
   // Hide method from for-in loops
   //
-  Object.defineProperty(Array.prototype, 'equals', { enumerable: false });
+  Object.defineProperty(Array.prototype, "equals", { enumerable: false });
 }
 //
 // Ignore that function
@@ -88,7 +88,7 @@ var Vector = function(initialCapacity, maxCapacity) {
 
 Vector.prototype.insert = function(index, value) {
   if (this.length >= this.capacity) {
-    this.resize('add');
+    this.resize("add");
   }
   let temp;
   for (let i = this.length; i >= index; i--) {
@@ -109,8 +109,17 @@ Vector.prototype.add = function(value) {
   if (isNaN(value)) {
     return;
   }
+  /* 
+  Amortized Analysis {
+    Amortized-Case,
+    Expected-Case
+  }
+
+  Add() Amortized O(1)
+  Expected-Case of Linear O(n)
+  */
   if (this.length >= this.capacity) {
-    this.resize('add');
+    this.resize("add");
   }
   this.storage[this.length++] = value;
 };
@@ -121,10 +130,11 @@ Vector.prototype.remove = function(index) {
     this.length--;
   }
   if (this.length <= this.capacity / 2) {
-    this.resize('remove');
+    this.resize("remove");
   }
   if (!index && index !== 0) return;
   this.storage[index] = undefined;
+  // Line 138 will almost always happen
   for (let i = index + 1; i < this.storage.length; i++) {
     if (this.storage[i] !== undefined) {
       this.storage[i - 1] = this.storage[i];
@@ -146,13 +156,13 @@ Vector.prototype.resize = function(direction) {
     return;
   }
   let tempStorage;
-  if (direction === 'add') {
+  if (direction === "add") {
     if (this.capacity * 2 > this.maxCapacity) {
       return;
     }
     this.capacity *= 2;
     tempStorage = new Array(this.capacity);
-  } else if (direction === 'remove') {
+  } else if (direction === "remove") {
     if (this.capacity / 2 < this.minCapacity) {
       return;
     }
@@ -179,133 +189,133 @@ test(true, function() {
   var v = new Vector();
 
   test(true, function() {
-    console.log('Initialize');
-    console.log('  v.length should be 0: ' + (v.length === 0));
-    console.log('  v.capacity should be 8: ' + (v.capacity === 8));
+    console.log("Initialize");
+    console.log("  v.length should be 0: " + (v.length === 0));
+    console.log("  v.capacity should be 8: " + (v.capacity === 8));
     console.log(
-      '  v.storage should be [undefined, ... x8]: ' +
+      "  v.storage should be [undefined, ... x8]: " +
         (v.storage.length === v.capacity)
     );
   });
 
   test(true, function() {
-    console.log('Add 3');
+    console.log("Add 3");
     v.add(0);
     v.add(1);
     v.add(2);
-    console.log('  v.length should be 3: ' + (v.length === 3));
-    console.log("STORAGE AFTER ADDING",v.storage);
-    console.log("STORAGE AFTER toARRAY",v.toArray())
+    console.log("  v.length should be 3: " + (v.length === 3));
+    console.log("STORAGE AFTER ADDING", v.storage);
+    console.log("STORAGE AFTER toARRAY", v.toArray());
     v.add(1);
     v.add(2);
-    console.log("STORAGE AFTER MORE ADDING",v.storage);
-    console.log("STORAGE AFTER MORE toARRAY",v.toArray())
+    console.log("STORAGE AFTER MORE ADDING", v.storage);
+    console.log("STORAGE AFTER MORE toARRAY", v.toArray());
     console.log(
-      '  v.toArray() should be [0, 1, 2]: ' + v.toArray().equals([0, 1, 2])
+      "  v.toArray() should be [0, 1, 2]: " + v.toArray().equals([0, 1, 2])
     );
-    v.remove()
-    v.remove()
-    console.log("STORAGE AFTER REMOVING",v.storage);
-    console.log("STORAGE AFTER REMOVING toARRAY",v.toArray())
+    v.remove();
+    v.remove();
+    console.log("STORAGE AFTER REMOVING", v.storage);
+    console.log("STORAGE AFTER REMOVING toARRAY", v.toArray());
   });
 
   test(true, function() {
-    console.log('Add 2 more');
+    console.log("Add 2 more");
     v.add(3);
     v.add(4);
-    console.log('  v.length should be 5: ' + (v.length === 5));
+    console.log("  v.length should be 5: " + (v.length === 5));
     console.log(
-      '  v.toArray() should be [0, 1, 2, 3, 4]: ' +
+      "  v.toArray() should be [0, 1, 2, 3, 4]: " +
         v.toArray().equals([0, 1, 2, 3, 4])
     );
   });
 
   test(true, function() {
-    console.log('Insert 1 at v[3]');
+    console.log("Insert 1 at v[3]");
     v.insert(3, 2.5);
-    console.log('  v.length should be 6: ' + (v.length === 6));
+    console.log("  v.length should be 6: " + (v.length === 6));
     console.log(
-      '  v.toArray() should be [0, 1, 2, 2.5, 3, 4]: ' +
+      "  v.toArray() should be [0, 1, 2, 2.5, 3, 4]: " +
         v.toArray().equals([0, 1, 2, 2.5, 3, 4])
     );
   });
 
   test(true, function() {
-    console.log('Remove v[3]');
+    console.log("Remove v[3]");
     v.remove(3);
-    console.log('  v.length should be 5: ' + (v.length === 5));
+    console.log("  v.length should be 5: " + (v.length === 5));
     console.log(
-      '  v.toArray() should be [0, 1, 2, 3, 4]: ' +
+      "  v.toArray() should be [0, 1, 2, 3, 4]: " +
         v.toArray().equals([0, 1, 2, 3, 4])
     );
   });
 
   test(true, function() {
-    console.log('Set v[2] = 15');
+    console.log("Set v[2] = 15");
     v.set(2, 15);
-    console.log('  v.get(2) should be 15: ' + (v.get(2) === 15));
+    console.log("  v.get(2) should be 15: " + (v.get(2) === 15));
   });
 
   test(true, function() {
-    console.log('Add 3 more');
+    console.log("Add 3 more");
     v.add(5);
     v.add(6);
     v.add(7);
-    console.log('  v.length should be 8: ' + (v.length === 8));
-    console.log('  v.capacity should be 8: ' + (v.capacity === 8));
+    console.log("  v.length should be 8: " + (v.length === 8));
+    console.log("  v.capacity should be 8: " + (v.capacity === 8));
   });
 
   test(true, function() {
-    console.log('Add 1 more to fill capacity');
+    console.log("Add 1 more to fill capacity");
     v.add(8);
-    console.log('  v.length should be 9: ' + (v.length === 9));
-    console.log('  v.capacity should be 16: ' + (v.capacity === 16));
+    console.log("  v.length should be 9: " + (v.length === 9));
+    console.log("  v.capacity should be 16: " + (v.capacity === 16));
   });
 
   test(true, function() {
-    console.log('Remove from the end');
+    console.log("Remove from the end");
     v.remove();
     console.log(
-      '  v.toArray() should be [0, 1, 15, 3, 4, 5, 6, 7]: ' +
+      "  v.toArray() should be [0, 1, 15, 3, 4, 5, 6, 7]: " +
         v.toArray().equals([0, 1, 15, 3, 4, 5, 6, 7])
     );
   });
 
   test(true, function() {
-    console.log('Remove v[2]');
+    console.log("Remove v[2]");
     v.remove(2);
     console.log(
-      '  v.toArray() should be [0, 1, 3, 4, 5, 6, 7]: ' +
+      "  v.toArray() should be [0, 1, 3, 4, 5, 6, 7]: " +
         v.toArray().equals([0, 1, 3, 4, 5, 6, 7])
     );
   });
 
   test(true, function() {
-    console.log('Remove the first');
+    console.log("Remove the first");
     v.remove(0);
     console.log(
-      '  v.toArray() should be [1, 3, 4, 5, 6, 7]: ' +
+      "  v.toArray() should be [1, 3, 4, 5, 6, 7]: " +
         v.toArray().equals([1, 3, 4, 5, 6, 7])
     );
-    console.log('  v.length should be 6: ' + (v.length === 6));
-    console.log('  v.capacity should be 8: ' + (v.capacity === 8));
+    console.log("  v.length should be 6: " + (v.length === 6));
+    console.log("  v.capacity should be 8: " + (v.capacity === 8));
   });
 
   test(true, function() {
-    console.log('Insert one at the beginning');
+    console.log("Insert one at the beginning");
     v.insert(0, 0);
-    
+
     console.log(
-      '  Insert 0 at v[0] should be [0, 1, 3, 4, 5, 6, 7]: ' +
+      "  Insert 0 at v[0] should be [0, 1, 3, 4, 5, 6, 7]: " +
         v.toArray().equals([0, 1, 3, 4, 5, 6, 7])
     );
   });
 
   test(true, function() {
-    console.log('Remove from beginning');
+    console.log("Remove from beginning");
     v.remove(0);
     console.log(
-      '  v.remove(0) should be [1, 3, 4, 5, 6, 7]: ' +
+      "  v.remove(0) should be [1, 3, 4, 5, 6, 7]: " +
         v.toArray().equals([1, 3, 4, 5, 6, 7])
     );
   });
@@ -314,77 +324,77 @@ test(true, function() {
 
   test(true, function() {
     console.log(
-      'Test inserting <capacity> items leaves the storage size at <capacity>'
+      "Test inserting <capacity> items leaves the storage size at <capacity>"
     );
-    console.log('  Re-Initialize');
-    console.log('    v.length should be 0: ' + (v.length === 0));
-    console.log('    v.capacity should be 8: ' + (v.capacity === 8));
+    console.log("  Re-Initialize");
+    console.log("    v.length should be 0: " + (v.length === 0));
+    console.log("    v.capacity should be 8: " + (v.capacity === 8));
     console.log(
-      '    v.storage should be [undefined, ... x8]: ' +
+      "    v.storage should be [undefined, ... x8]: " +
         (v.storage.length === v.capacity)
     );
   });
 
   test(true, function() {
-    console.log('  Add 6');
+    console.log("  Add 6");
     v.add(0);
     v.add(1);
     v.add(2);
     v.add(3);
     v.add(4);
     v.add(5);
-    console.log('    v.length should be 6: ' + (v.length === 6));
+    console.log("    v.length should be 6: " + (v.length === 6));
     console.log(
-      '    v.toArray() should be [0, 1, 2, 3, 4, 5]: ' +
+      "    v.toArray() should be [0, 1, 2, 3, 4, 5]: " +
         v.toArray().equals([0, 1, 2, 3, 4, 5])
     );
   });
 
   test(true, function() {
-    console.log('  Insert 1');
+    console.log("  Insert 1");
     v.insert(1, 6);
     console.log(
-      '    v.toArray() should be [0, 6, 1, 2, 3, 4, 5]: ' +
+      "    v.toArray() should be [0, 6, 1, 2, 3, 4, 5]: " +
         v.toArray().equals([0, 6, 1, 2, 3, 4, 5])
     );
   });
 
   test(true, function() {
-    console.log('  Insert 1 More');
+    console.log("  Insert 1 More");
     v.insert(1, 7);
-    console.log('    v.length should be 8: ' + (v.length === 8));
+    console.log("    v.length should be 8: " + (v.length === 8));
     console.log(
-      '    v.storage.length should be 8: ' + (v.storage.length === 8)
+      "    v.storage.length should be 8: " + (v.storage.length === 8)
     );
     console.log(
-      '    v.toArray() should be [0, 7, 6, 1, 2, 3, 4, 5]: ' +
+      "    v.toArray() should be [0, 7, 6, 1, 2, 3, 4, 5]: " +
         v.toArray().equals([0, 7, 6, 1, 2, 3, 4, 5])
     );
   });
 
   test(true, function() {
-    console.log('  Insert 1 Beyond Initial Capactity of 8');
+    console.log("  Insert 1 Beyond Initial Capactity of 8");
     v.insert(6, 8);
-    console.log('    v.length should be 9: ' + (v.length === 9));
+    console.log("    v.length should be 9: " + (v.length === 9));
     console.log(
-      '    v.storage.length should be 16: ' + (v.storage.length === 16)
+      "    v.storage.length should be 16: " + (v.storage.length === 16)
     );
     console.log(
-      '    v.toArray() should be [0, 7, 6, 1, 2, 3, 8, 4, 5]: ' +
+      "    v.toArray() should be [0, 7, 6, 1, 2, 3, 8, 4, 5]: " +
         v.toArray().equals([0, 7, 6, 1, 2, 3, 8, 4, 5])
     );
   });
 
   test(true, function() {
-    console.log('Test removing to half capacity reduces storage to half');
+    console.log("Test removing to half capacity reduces storage to half");
     v.remove();
     console.log(
-      '  v.remove() should be [0, 7, 6, 1, 2, 3, 8, 4]: ' +
+      "  v.remove() should be [0, 7, 6, 1, 2, 3, 8, 4]: " +
         v.toArray().equals([0, 7, 6, 1, 2, 3, 8, 4])
     );
-    console.log('  v.length should be 8: ' + (v.length === 8));
-    console.log('  v.capacity should be 8: ' + (v.capacity === 8));
-    console.log('  v.storage.length should be 8: ' + (v.storage.length === 8));
+    console.log("  v.length should be 8: " + (v.length === 8));
+    console.log("  v.capacity should be 8: " + (v.capacity === 8));
+    console.log("  v.storage.length should be 8: " + (v.storage.length === 8));
   });
 });
 
@@ -403,14 +413,14 @@ function testRunner(totalTests) {
       count += 1;
       test();
     } else {
-      console.log('');
-      console.log('');
+      console.log("");
+      console.log("");
 
       if (count === totalTests) {
-        console.log('All tests were executed.');
+        console.log("All tests were executed.");
       } else {
         console.log(
-          totalTests - count + ' of ' + totalTests + ' tests were not executed.'
+          totalTests - count + " of " + totalTests + " tests were not executed."
         );
       }
     }
