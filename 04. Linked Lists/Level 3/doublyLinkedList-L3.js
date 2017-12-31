@@ -54,7 +54,7 @@ if (!Array.prototype.equals) {
 //
 // Extra Credit (for the brave and true)
 //
-//  [ ] Write a function using a doubly linked list to return the index of the nth odd number from the
+//  [x] Write a function using a doubly linked list to return the index of the nth odd number from the
 //      tail of the list.
 //  [X] Implement a new Vector class using a Doubly LinkedList as a backing store
 //
@@ -66,6 +66,31 @@ var Vector = function() {
   this.max = maxCapacity || 1 << 5; // Default max vector size to 32
   this.length = 0;
   this.storage = new DoublyLinkedList();
+};
+
+Vector.prototype.findNthOddLast = function(endingNode, nth) {
+  var wantedNode = null;
+  var length = 0;
+  var startingNode = this.storage.head;
+
+  // find the length of the list
+  while (startingNode !== null) {
+    length++;
+    startingNode = startingNode.next;
+  }
+
+  // loop backward to find the nth last odd node, subtract from length to get index
+  while (endingNode !== null) {
+    if (endingNode.data % 2 !== 0) {
+      if (nth-- === 0) {
+        wantedNode = endingNode;
+        return length;
+      }
+    }
+    endingNode = endingNode.prev;
+    length--;
+  }
+  return null;
 };
 
 // DoublyLinkedListNode: O(1)
@@ -230,7 +255,7 @@ DoublyLinkedList.prototype.set = function(index, data) {
 
   while (currentNode !== null) {
     if (counter === index) {
-      if(currentNode === this.head) {
+      if (currentNode === this.head) {
         newNode.next = this.head.next;
         this.head.next.prev = newNode;
         this.head = newNode;
@@ -429,7 +454,7 @@ DoublyLinkedList.prototype.contains = function(data) {
       for (var i = 7; i >= 0; i--) {
         a.push(list.get(i));
       }
-      console.log('a',a);
+      console.log("a", a);
       console.log(
         "  get(7 ... 0) should yield [7, 6, 5, 4, 3, 2, 1, 0]: " +
           a.equals([7, 6, 5, 4, 3, 2, 1, 0])
