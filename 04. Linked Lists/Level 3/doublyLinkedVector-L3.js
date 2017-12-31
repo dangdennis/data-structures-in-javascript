@@ -69,13 +69,14 @@ Vector.prototype.findNthOddLast = function(endingNode, nth) {
       //   nthOddPosition++;
       if (nth-- === 0) {
         wantedNode = endingNode;
+        return length;
       }
     }
     endingNode = endingNode.prev;
     length--;
   }
 
-  return length;
+  return null;
 };
 
 Vector.prototype.toArray = function() {

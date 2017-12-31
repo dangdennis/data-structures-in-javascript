@@ -1,10 +1,13 @@
-
 /*
 
-1. Analyze your Vector implementation,  what is the Big-O of each function.  Why?
+1. [x] Analyze your Vector implementation,  what is the Big-O of each function.  Why?
+    {{ Refer to vector_L2.js }}
 2. Analyze your Doubly Linked List implementation, what is the Big-O of each function.  Why?
+    {{ Refer to doublyLinkedList}}
 3. Write a function using a doubly linked list to return the index of the nth odd number from the tail of the list (think back to the arrays exercise asking the same thing)
+write answer before DDL
 4. Implement a Vector class, where the `this.storage = new DoublyLinkedList()` instead of array like before
+dont need resize function
 5. Analyze again the Big-O of all the fuctions of the new Vector class using doubly linked list, what is the big-O,why?
 
 Learning Objectives:
@@ -19,3 +22,6 @@ Reason Why:
 
 
  */
+
+// Add DDL first
+// Then add vectors

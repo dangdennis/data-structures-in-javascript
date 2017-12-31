@@ -86,6 +86,8 @@ var Vector = function(initialCapacity, maxCapacity) {
   this.storage = new Array(this.capacity);
 };
 
+// Vector.insert is O(n) due to a for-loop on line 96
+// this.resize is O(n), independent of line 96
 Vector.prototype.insert = function(index, value) {
   if (this.length >= this.capacity) {
     this.resize("add");
@@ -105,6 +107,8 @@ Vector.prototype.insert = function(index, value) {
   }
 };
 
+// Vector.add is amortized O(1)
+// Resize is linear but runs intermittently
 Vector.prototype.add = function(value) {
   if (isNaN(value)) {
     return;
@@ -124,6 +128,8 @@ Vector.prototype.add = function(value) {
   this.storage[this.length++] = value;
 };
 
+// Vector.remove is O(n) due to for-loop line 143
+// this.resize is O(n), independent of line 144
 Vector.prototype.remove = function(index) {
   if (!index && index !== 0) {
     this.storage[this.length - 1] = undefined;
@@ -143,14 +149,17 @@ Vector.prototype.remove = function(index) {
   this.length--;
 };
 
+// Vector.get = O(1)
 Vector.prototype.get = function(index) {
   return this.storage[index];
 };
 
+// Vector.get = O(1)
 Vector.prototype.set = function(index, value) {
   this.storage[index] = value;
 };
 
+// Vector.resize = O(n) due to line 181
 Vector.prototype.resize = function(direction) {
   if (!direction) {
     return;
@@ -176,6 +185,7 @@ Vector.prototype.resize = function(direction) {
   this.storage = tempStorage;
 };
 
+// Vector.toArray = O(n)
 Vector.prototype.toArray = function() {
   var result = [];
   for (var i = 0; i < this.length; i++) {
