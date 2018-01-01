@@ -243,8 +243,9 @@
 
     test(true, function() {
       console.log("Find a value");
-      console.log("  v.find(3) should be index 5: " + (v.find(3) === 5));
+      console.log("  v.find(3) should return the node containing it: " + (v.find(3) != null));
       console.log("  v.contains(7) should be true: " + (v.contains(7)));
+      console.log("  v.contains(100) should be false: " + (v.contains(100) == false));
     });
 
 
