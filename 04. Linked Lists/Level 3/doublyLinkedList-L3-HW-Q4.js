@@ -317,11 +317,11 @@ Vector.prototype.insert = function(index, value) {
 };
 
 Vector.prototype.add = function(value) {
-  var newNode = new DoublyLinkedListNode(value);
-
   if (this.length === this.max) {
     throw new Error("Max capacity reached.");
   }
+
+  var newNode = new DoublyLinkedListNode(value);
 
   if (this.storage.head === null && this.storage.tail === null) {
     this.storage.head = newNode;
@@ -346,7 +346,7 @@ Vector.prototype.remove = function(index) {
   var counter = 0;
 
   if (!index && index !== 0) {
-    if(this.length === 1) {
+    if (this.length === 1) {
       this.storage.tail = null;
       this.storage.head = null;
       return this.storage.head;
@@ -426,6 +426,8 @@ Vector.prototype.find = function(value) {
     }
     currentNode = currentNode.next;
   }
+
+  return null;
 };
 
 Vector.prototype.contains = function(value) {
@@ -476,7 +478,6 @@ Vector.prototype.toArray = function() {
     node = node.next;
   }
 
-  console.log("RESULT", result);
   return result;
 };
 
