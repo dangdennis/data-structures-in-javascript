@@ -77,6 +77,7 @@ NOTE: Satisfy all the tests.  Do not modify or comment of them out
 
 */
 
+// Constructor: O(1)
 var Vector = function(initialCapacity, maxCapacity) {
   this.capacity = initialCapacity || 8; // Default array size initially to 8 elements
   this.minCapacity = this.capacity; // Don't reduce below this value
@@ -140,7 +141,6 @@ Vector.prototype.remove = function(index) {
   }
   if (!index && index !== 0) return;
   this.storage[index] = undefined;
-  // Line 138 will almost always happen
   for (let i = index + 1; i < this.storage.length; i++) {
     if (this.storage[i] !== undefined) {
       this.storage[i - 1] = this.storage[i];
