@@ -280,7 +280,7 @@ DoublyLinkedList.prototype.contains = function(data) {
 
 var Vector = function(initialCapacity, maxCapacity) {
   this.capacity = initialCapacity || 8; // Default array size initially to 8 elements
-  this.max = maxCapacity || 1 << 5; // Default max vector size to 32
+  this.max = maxCapacity || 1 << 3; // Default max vector size to 32
   this.length = 0;
 
   // this.storage = new DoublyLinkedList();
@@ -353,6 +353,7 @@ Vector.prototype.remove = function(index) {
     if (this.length === 1) {
       this.storage.tail = null;
       this.storage.head = null;
+      this.length--;
       return this.storage.head;
     }
     this.storage.tail.prev.next = null;
@@ -531,7 +532,7 @@ Vector.prototype.toArray = function() {
 
   var test = testRunner(20);
   test(true, function() {
-    var v = new Vector(null, 8);
+    var v = new Vector();
 
     test(true, function() {
       console.log("Initialize");
@@ -631,7 +632,7 @@ Vector.prototype.toArray = function() {
       console.log("  v.remove(0) should be [1, 3, 4, 5, 6]: " + v.toArray().equals([1, 3, 4, 5, 6]));
     });
 
-    v = new Vector(null, 8);
+    v = new Vector();
 
     test(true, function() {
       console.log("Test inserting <capacity> items leaves the storage size at <capacity>");

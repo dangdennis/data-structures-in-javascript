@@ -3,10 +3,25 @@
 //  from the tail of the list (think back to the arrays exercise asking the same thing)
 //
 
-DoublyLinkedListNode.prototype.findNthOddLast = function(endingNode, nth) {
+// Separate function from data structure
+
+// DoublyLinkedListNode: O(1)
+var DoublyLinkedListNode = function(data, next, previous) {
+  this.data = data;
+  this.next = next || null;
+  this.prev = previous || null;
+};
+
+// DoublyLinkedListNode: O(1)
+var DoublyLinkedList = function() {
+  this.head = null;
+  this.tail = this.head;
+};
+
+DoublyLinkedList.prototype.findNthOddLast = function(endingNode, nth) {
   var wantedNode = null;
   var length = 0;
-  var startingNode = this.head
+  var startingNode = this.head;
 
   // find the length of the list
   while (startingNode !== null) {
@@ -26,19 +41,6 @@ DoublyLinkedListNode.prototype.findNthOddLast = function(endingNode, nth) {
     length--;
   }
   return null;
-};
-
-// DoublyLinkedListNode: O(1)
-var DoublyLinkedListNode = function(data, next, previous) {
-  this.data = data;
-  this.next = next || null;
-  this.prev = previous || null;
-};
-
-// DoublyLinkedListNode: O(1)
-var DoublyLinkedList = function() {
-  this.head = null;
-  this.tail = this.head;
 };
 
 // DoublyLinkedList.validateStartingLink: O(1)
