@@ -4,31 +4,31 @@
   Write all the Big-O results on a grid, comparing against each other:
 
 
-                          Q1      Q2          Q5
-
+                           Q1      Q2          Q5
+ 
+                                               L
                                               L
-                                             L
-                                            D
+                                             D
+ 
+                           R       Y       R
+                          O       L       O
+                         T       B       T
+                        C       U       C
+                       E       O       E
+                      V       D       V
 
-                          R       Y       R
-                         O       L       O
-                        T       B       T
-                       C       U       C
-                      E       O       E
-                     V       D       V
-
-    Constructor  :   ???     ???     ???
-    Insert       :   ???     ???     ???
-    InsertBefore :   ???     ???     ???
-    InsertAfter  :   ???     ???     ???
-    Add          :   ???     ???     ???
-    Remove       :   ???     ???     ???
-    Get          :   ???     ???     ???
-    Set          :   ???     ???     ???
-    Resize       :   ???     ???     ???
-    Find         :   ???     ???     ???
-    Contains     :   ???     ???     ???
-    toArray      :   ???     ???     ???
+    Constructor  :  O(1)    O(1)    O(1)
+    Insert       :  O(n)    O(1)    O(1)
+    InsertBefore :  O(n)    O(1)    O(1) 
+    InsertAfter  :  O(n)    O(1)    O(1)
+    Add          :  O(1)    O(1)    O(1)
+    Remove       :  O(n)    O(1)    O(1)
+    Get          :  O(1)    O(n)    O(n)
+    Set          :  O(1)    O(n)    O(n)
+    Resize       :  O(n)    N/A     N/A
+    Find         :  O(n)    O(n)    O(n)
+    Contains     :  O(n)    O(n)    O(n)
+    toArray      :  O(n)    O(n)    O(n)
 
 
   NOTE:
@@ -38,7 +38,7 @@
    less, as DoublyLinkedList.insertBefore() and Vector.add() is roughly the same as
    DoublyLinkedList.insertAfter().
 
-  You can get a feel for efficiency by considering what you'll be doig most of.  If you'll be creating
+  You can get a feel for efficiency by considering what you'll be doing most of.  If you'll be creating
    the data structure and then doing a lot of appends (at the end) then you look to see what algorithms
    are better at that.  If you'll be doing a lot of random access (get/set) then you look at the efficiency
    of those operations.  If you'll be doing a lost of random inserts/removes then you look there to see

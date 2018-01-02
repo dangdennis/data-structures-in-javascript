@@ -5,16 +5,16 @@
 
   Vector-L3:
 
-    Constructor :
-    Insert      :
-    Add         :
-    Remove      :
-    Get         :
-    Set         :
-    Resize      :
-    Find        :
-    Contains    :
-    toArray     :
+    Constructor : O(1) 
+    Insert      : O(n), for-loop on line 97
+    Add         : amortized O(1), expected case linear due to .resize
+    Remove      : O(n), for-loop line 145
+    Get         : O(1), single operation
+    Set         : O(1)
+    Resize      : O(n)
+    Find        : O(n)
+    Contains    : O(n)
+    toArray     : O(n)
 
 
 */

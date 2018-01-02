@@ -6,15 +6,16 @@
 
   Vector using DoublyLinkedList:
 
-    Constructor :
-    Insert      :
-    Add         :
-    Remove      :
-    Get         :
-    Set         :
-    Resize      :
-    Find        :
-    Contains    :
-    toArray     :
+    Constructor : O(1)
+    Traversal:     : O(n)
+    Insert      : O(1), O(n) if traversing via while loop line 299
+    Add         : O(1), adds to tail only
+    Remove      : O(1), O(n) if traversing via while loop line line 367
+    Get         : O(n), while loop line 393
+    Set         : O(n), while loop line 410
+    Resize      : N/A
+    Find        : O(n), while loop line 423
+    Contains    : O(n), while loop line 436
+    toArray     : O(n), while loop line 476
 
 */
