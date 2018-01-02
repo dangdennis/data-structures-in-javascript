@@ -278,9 +278,8 @@ DoublyLinkedList.prototype.contains = function(data) {
 
 // Paste code for Vector-L3 in place of this line
 
-var Vector = function(initialCapacity, maxCapacity) {
-  this.capacity = initialCapacity || 8; // Default array size initially to 8 elements
-  this.max = maxCapacity || 1 << 3; // Default max vector size to 32
+var Vector = function(maxCapacity) {
+  this.max = maxCapacity || 1 << 3; // Default max vector size to 8
   this.length = 0;
 
   // this.storage = new DoublyLinkedList();
