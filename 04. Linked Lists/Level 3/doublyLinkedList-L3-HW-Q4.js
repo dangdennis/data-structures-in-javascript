@@ -32,7 +32,7 @@
 
    1. [x] Copy the Doubly Linked List (DLL) implementation into this file first (without the unit tests)
    2. [x] Copy the completed Vector-L3 implementation (without the unit tests) below the DLL
-   3. [ ] Make the necessary changes to Vector so the unit tests pass using the DLL as a backing store
+   3. [x] Make the necessary changes to Vector so the unit tests pass using the DLL as a backing store
 
 */
 
@@ -290,6 +290,10 @@ var Vector = function(initialCapacity, maxCapacity) {
 Vector.prototype.insert = function(index, value) {
   if (index < 0 || index > this.length) {
     throw new Error("Out of bounds.");
+  }
+
+  if (this.storage.head === null) {
+    throw new Error("No existing node.");
   }
 
   var newNode = new DoublyLinkedListNode(value);
