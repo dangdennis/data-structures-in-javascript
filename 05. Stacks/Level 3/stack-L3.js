@@ -1,4 +1,3 @@
-
 /*
   In the previous challenge, L2, we implemented a double stack.  Hopefully that got
    blood flowing (not boiling).  It is certainly a challenging little implementation
@@ -45,10 +44,10 @@
 
 */
 
-var DoubleStack = function(initialCapacity) {
+var DoubleStack = function(initialCapacity, maxCapacity) {
   this.storage = []; // Change to dynamic array or vector
-  this.max = 1 << 5;                                // max = 32
-  this.min = initialCapacity || 8;                  // default to 8
+  this.max = maxCapacity | 1 << 5; // max = 32
+  this.min = initialCapacity || 8; // default to 8
   this.length = 0;
   this.lengthFront = 0;
 };

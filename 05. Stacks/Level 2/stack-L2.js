@@ -13,13 +13,13 @@
    double stack is a data structure that allows you to push and pop values from both
    the front and the back of the stack.
 
-    [ ] Complete the implementation of a DoubleStack class
+    [x] Complete the implementation of a DoubleStack class
     [x] .storage property to hold the items on the stack using a standard array
-    [ ] .push() function to push a value from the back
-    [ ] .pop() function to pop a value from the back
-    [ ] .pushFront() function to push a value from the front
-    [ ] .popFront() function to pop a value from the front
-    [ ] .length property to return the total size used
+    [x] .push() function to push a value from the back
+    [x] .pop() function to pop a value from the back
+    [x] .pushFront() function to push a value from the front
+    [x] .popBack() function to pop a value from the front
+    [x] .length property to return the total size used
 
   NOTE: Do not use any built-in features
   NOTE: Do not focus on edge cases or error conditions
@@ -34,45 +34,50 @@
 
 var DoubleStack = function(initialCapacity) {
   this.storage = new Array(initialCapacity || 16);
-  this.frontLength = 0;
-  this.frontPointer = 0;
-  this.backlength = 0;
-  this.backPointer = initialCapacity - 1;
-};
-
-DoubleStack.prototype.pushFront = function(value) {
-  if (this.storage[this.backPointer] && this.backPointer < this.frontPointer) {
-    throw new Error("No more memory!");
-  }
-  this.storage[this.backPointer] = value;
-  this.backLength++;
-  this.backPointer--;
-};
-
-DoubleStack.prototype.popFront = function() {
-  var temp = this.storage[this.backPointer];
-  this.storage[this.backPointer] = undefined;
-  this.backLength--;
-  this.backPointer++;
-  return temp;
+  this.lengthFront = 0;
+  this.pointerFront = 0;
+  this.lengthBack = 0;
+  this.pointerBack = initialCapacity - 1;
 };
 
 DoubleStack.prototype.push = function(value) {
-  if (this.storage[this.frontPointer] && this.frontPointer > this.backPointer) {
+  if (this.storage[this.pointerBack] && this.pointerBack < this.pointerFront) {
     throw new Error("No more memory!");
   }
-  this.storage[this.frontPointer] = value;
-  this.frontLength++;
-  this.frontPointer++;
+  this.storage[this.pointerBack] = value;
+  this.lengthBack++;
+  this.pointerBack--;
 };
 
 DoubleStack.prototype.pop = function() {
-  var temp = this.storage[this.frontPointer];
-  this.storage[this.frontPointer] = undefined;
-  this.frontLength--;
-  this.frontPointer--;
+  var temp = this.storage[this.pointerBack];
+  this.storage[this.pointerBack] = undefined;
+  this.lengthBack--;
+  this.pointerBack++;
   return temp;
 };
+
+DoubleStack.prototype.pushFront = function(value) {
+  if (this.storage[this.pointerFront] && this.pointerFront > this.pointerBack) {
+    throw new Error("No more memory!");
+  }
+  this.storage[this.pointerFront] = value;
+  this.lengthFront++;
+  this.pointerFront++;
+};
+
+DoubleStack.prototype.popBack = function() {
+  var temp = this.storage[this.pointerFront];
+  this.storage[this.pointerFront] = undefined;
+  this.lengthFront--;
+  this.pointerFront--;
+  return temp;
+};
+
+DoubleStack.prototype.length = function() {
+  return this.lengthFront + this.lengthBack;
+};
+
 
 var dd = new DoubleStack(8);
 dd.push(1);
@@ -85,7 +90,7 @@ dd.pushFront(7);
 dd.pushFront(8);
 var r1 = dd.pop();
 console.log(r1);
-var r2 = dd.popFront();
+var r2 = dd.popBack();
 console.log(r2);
 
 console.log(dd.storage);
