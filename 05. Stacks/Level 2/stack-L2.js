@@ -1,4 +1,3 @@
-
 /*
   The traditional Stack data structure allows you to push and pop items from only one
    end of the storage -- the back.  This is sufficient for many problems that the stack
@@ -35,22 +34,58 @@
 
 var DoubleStack = function(initialCapacity) {
   this.storage = new Array(initialCapacity || 16);
-  this.length = 0;
-  this.lengthFront = 0;
-};
-
-DoubleStack.prototype.push = function(value) {
-  // ...
-};
-
-DoubleStack.prototype.pop = function() {
-  // ...
+  this.frontLength = 0;
+  this.frontPointer = 0;
+  this.backlength = 0;
+  this.backPointer = initialCapacity - 1;
 };
 
 DoubleStack.prototype.pushFront = function(value) {
-  // ...
+  if (this.storage[this.backPointer] && this.backPointer < this.frontPointer) {
+    throw new Error("No more memory!");
+  }
+  this.storage[this.backPointer] = value;
+  this.backLength++;
+  this.backPointer--;
 };
 
 DoubleStack.prototype.popFront = function() {
-  // ...
+  var temp = this.storage[this.backPointer];
+  this.storage[this.backPointer] = undefined;
+  this.backLength--;
+  this.backPointer++;
+  return temp;
 };
+
+DoubleStack.prototype.push = function(value) {
+  if (this.storage[this.frontPointer] && this.frontPointer > this.backPointer) {
+    throw new Error("No more memory!");
+  }
+  this.storage[this.frontPointer] = value;
+  this.frontLength++;
+  this.frontPointer++;
+};
+
+DoubleStack.prototype.pop = function() {
+  var temp = this.storage[this.frontPointer];
+  this.storage[this.frontPointer] = undefined;
+  this.frontLength--;
+  this.frontPointer--;
+  return temp;
+};
+
+var dd = new DoubleStack(8);
+dd.push(1);
+dd.push(2);
+dd.pushFront(3);
+dd.pushFront(4);
+dd.push(5);
+dd.push(6);
+dd.pushFront(7);
+dd.pushFront(8);
+var r1 = dd.pop();
+console.log(r1);
+var r2 = dd.popFront();
+console.log(r2);
+
+console.log(dd.storage);

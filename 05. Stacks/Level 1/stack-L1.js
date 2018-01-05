@@ -1,57 +1,51 @@
-
 /*
 
   Your objective is to implement a stack without using any built-in features.
 
-    [ ] Complete the implementation of a Stack class
+    [x] Complete the implementation of a Stack class
     [x] .storage property to hold the items on the stack using an array
-    [ ] .length property to return the current length
-    [ ] .push() function to push a value onto the stack
-    [ ] .pop() function to pop a value off the stack
-    [ ] .peek() function to return the top value without removing it
+    [x] .length property to return the current length
+    [x] .push() function to push a value onto the stack
+    [x] .pop() function to pop a value off the stack
+    [x] .peek() function to return the top value without removing it
 
   NOTE: Do not use any built-in array functions
   NOTE: Do not focus on edge cases or error conditions
 
 */
 
-
 var Stack = function() {
   this.storage = [];
+  this.length = 0;
 };
 
+Stack.prototype.length = function() {
+  return this.length;
+};
 
 Stack.prototype.push = function(value) {
-  // ...
+  this.storage[this.length] = value;
+  this.length++;
 };
-
 
 Stack.prototype.pop = function() {
-  // ...
+  var temp = this.storage[this.length - 1];
+  delete this.storage[this.length - 1];
+  this.length--;
+  return temp;
 };
-
 
 Stack.prototype.peek = function() {
-  // ...
+  return this.storage[this.length - 1];
 };
 
-
-
-
-
-
-
-
 (function() {
-
   // Ignore this function.  Needed to make the tests function properly.
   //
-  if(!Array.prototype.equals) {
-
+  if (!Array.prototype.equals) {
     // attach the .equals method to Array's prototype to call it on any array
     //
-    Array.prototype.equals = function (array) {
-
+    Array.prototype.equals = function(array) {
       // if the other array is a falsy value, return
       //
       if (!array) {
@@ -65,18 +59,15 @@ Stack.prototype.peek = function() {
       }
 
       for (var i = 0, l = this.length; i < l; i++) {
-
         // Check if we have nested arrays
         //
         if (this[i] instanceof Array && array[i] instanceof Array) {
-
           // recurse into the nested arrays
           //
           if (!this[i].equals(array[i])) {
             return false;
           }
-        }
-        else if (this[i] != array[i]) {
+        } else if (this[i] != array[i]) {
           // Warning - two different object instances will never be equal: {x:20} != {x:20}
           //
           return false;
@@ -87,22 +78,20 @@ Stack.prototype.peek = function() {
 
     // Hide method from for-in loops
     //
-    Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+    Object.defineProperty(Array.prototype, "equals", { enumerable: false });
   }
   //
   // Ignore that function
-
 
   function toArray() {
     return s.storage;
   }
 
-
   var test = testRunner(2);
-  test(true, function () {
+  test(true, function() {
     var s = new Stack();
 
-    test(true, function () {
+    test(true, function() {
       console.log("Create new instance of Stack.");
       console.log("  s is not null: " + (s != null));
       console.log("  s.storage is not undefined: " + (s.storage !== undefined));
@@ -120,7 +109,7 @@ Stack.prototype.peek = function() {
       s.push(2);
       s.push(3);
       s.push(4);
-      console.log("  s.storage = [1, 2, 3, 4]: " + (s.storage.equals([1, 2, 3, 4])));
+      console.log("  s.storage = [1, 2, 3, 4]: " + s.storage.equals([1, 2, 3, 4]));
     });
 
     test(true, function() {
@@ -148,7 +137,7 @@ Stack.prototype.peek = function() {
 
     test(true, function() {
       console.log("Backing storage is correct");
-      console.log("  s.storage == [1]: " + (s.storage.equals([1, undefined, undefined, undefined])));
+      console.log("  s.storage == [1]: " + s.storage.equals([1, undefined, undefined, undefined]));
     });
 
     test(true, function() {
@@ -162,15 +151,13 @@ Stack.prototype.peek = function() {
     });
   });
 
-
   test(true, null);
-
 
   function testRunner(totalTests) {
     totalTests -= 1; // remove one for the main test runner
     var count = -1;
 
-    return function (go, test) {
+    return function(go, test) {
       if (!go) {
         return;
       }
@@ -178,18 +165,16 @@ Stack.prototype.peek = function() {
       if (test != null) {
         count += 1;
         test();
-      }
-      else {
+      } else {
         console.log("");
         console.log("");
 
         if (count === totalTests) {
           console.log("All tests were executed.");
-        }
-        else {
-          console.log((totalTests - count) + " of " + totalTests + " tests were not executed.");
+        } else {
+          console.log(totalTests - count + " of " + totalTests + " tests were not executed.");
         }
       }
-    }
+    };
   }
 })();
