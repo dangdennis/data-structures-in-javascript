@@ -19,8 +19,8 @@ var Queue = function() {
   this.pointer = 0;
 };
 
-Queue.prototype.length = function() {
-  return this.length;
+Queue.prototype.getLength = function() {
+  return this.length - this.pointer;
 };
 
 Queue.prototype.enqueue = function(value) {
@@ -32,9 +32,20 @@ Queue.prototype.dequeue = function() {
   var temp = this.storage[this.pointer]
   this.storage[this.pointer] = null;
   this.pointer++;
-  this.length--;
+  //this.length--;
   return temp;
 };
+
+Queue.prototype.toArray = function() {
+  var result = [];
+
+  for (var i=this.pointer; i<this.length; i++) {
+    result.push(this.storage[i]);
+  }
+
+  return result;
+};
+
 
 var q = new Queue();
 q.enqueue(1);
@@ -46,3 +57,15 @@ console.log(q.pointer);
 var r1 = q.dequeue();
 console.log('r1',r1);
 console.log(q.storage);
+
+console.log(q.length);
+q.dequeue();
+console.log(q.length);
+console.log(q.storage);
+q.enqueue("X");
+console.log(q.storage);
+var x = q.dequeue();
+console.log(x);
+console.log(q.storage);
+console.log(q.getLength());
+console.log(q.toArray());
