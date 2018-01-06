@@ -94,3 +94,39 @@ var r2 = dd.popFront();
 console.log(r2);
 
 console.log(dd.storage);
+
+
+/*
+
+initially: lengthBack = storage.length;  <-- 14 in this case
+           lengthFront = 0;              <-- 0 in this case
+
+
+
+F                                        B
+|                                        |
+[a, _, _, _, _, _, _, _, _, _, _, _, _, 1]
+    |                                   |
+    LF                                  LB
+
+
+pushBack(1);
+   storage[--lengthBack] = value;
+
+   getLengthBack()
+      return storage.length - lengthBack;
+
+pushBack(2)
+popBack();
+   fetch storage[++lengthBack]
+   then delete it
+   return it
+
+
+pushFront(a)
+  storage[lengthFront++] = value;
+
+  getLengthFront()
+    return lengthFront
+
+*/
