@@ -1,4 +1,29 @@
 
+
+/*
+
+ Set is a mathematical construct that holds unique values.
+
+ whereas an array can hold [ 1, 2, 3, 1, 2, 3, 3, 4, x, ... ]
+
+ a set would be
+
+ { 1, 2, 3, 4, x, ... }
+
+ won't usually say get me index [_]... but instead you ask
+  does the set S have 3... var s = new Set = { ... } ....
+  later you'd say if s.has(3);
+
+ in case of Set, key is the value
+
+
+ There is an idea of multiSet which allows duplicates
+
+ */
+
+
+
+
 /*
   A Set is a data structure that holds any non-repeating values.  The order of values
    isn't usually important though some implementations my require ordering.  The
