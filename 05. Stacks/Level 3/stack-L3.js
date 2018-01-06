@@ -130,3 +130,30 @@ DoubleStack.prototype.resize = function(direction) {
 
   this.storage = tempStorage;
 };
+
+
+
+/*
+
+  t = new array(length * 2)
+  copy all front items to front of new array (everything from 0 to lengthFront)
+  copy all back items to back of new array (everything from lengthBack to storage.length)
+
+
+  OLD ARRAY:
+
+             LB
+             |           +-- storage.length
+  [a, b, c, d, 4, 3, 2, 1]
+   0         |
+             LF
+
+
+  NEW ARRAY
+
+             LF                      LB
+             |                       |           +-- storage.length (new storage)
+  [a, b, c, d, _, _, _, _, _, _, _, _, 4, 3, 2, 1]
+   0
+
+*/
