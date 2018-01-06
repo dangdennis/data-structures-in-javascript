@@ -18,7 +18,7 @@
     [x] .push() function to push a value from the back
     [x] .pop() function to pop a value from the back
     [x] .pushFront() function to push a value from the front
-    [x] .popBack() function to pop a value from the front
+    [x] .popFront() function to pop a value from the front
     [x] .length property to return the total size used
 
   NOTE: Do not use any built-in features
@@ -66,7 +66,7 @@ DoubleStack.prototype.pushFront = function(value) {
   this.pointerFront++;
 };
 
-DoubleStack.prototype.popBack = function() {
+DoubleStack.prototype.popFront = function() {
   var temp = this.storage[this.pointerFront];
   this.storage[this.pointerFront] = undefined;
   this.lengthFront--;
@@ -90,7 +90,7 @@ dd.pushFront(7);
 dd.pushFront(8);
 var r1 = dd.pop();
 console.log(r1);
-var r2 = dd.popBack();
+var r2 = dd.popFront();
 console.log(r2);
 
 console.log(dd.storage);

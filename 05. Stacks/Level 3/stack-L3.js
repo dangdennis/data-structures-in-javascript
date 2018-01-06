@@ -46,24 +46,87 @@
 
 var DoubleStack = function(initialCapacity, maxCapacity) {
   this.storage = []; // Change to dynamic array or vector
-  this.max = maxCapacity | 1 << 5; // max = 32
+  this.max = maxCapacity || 1 << 5; // max = 32
   this.min = initialCapacity || 8; // default to 8
-  this.length = 0;
   this.lengthFront = 0;
+  this.pointerFront = 0;
+  this.lengthBack = 0;
+  this.pointerBack = initialCapacity - 1;
 };
 
 DoubleStack.prototype.push = function(value) {
-  // ...
+  if (this.storage[this.pointerBack] && this.pointerBack < this.pointerFront) {
+    this.resize("add");
+  }
+  this.storage[this.pointerBack] = value;
+  this.lengthBack++;
+  this.pointerBack--;
 };
 
 DoubleStack.prototype.pop = function() {
-  // ...
+  var lengthCheck = 0;
+  if (lengthCheck / 2 <= this.length) {
+    this.resize("remove");
+  }
+  var temp = this.storage[this.pointerBack];
+  this.storage[this.pointerBack] = undefined;
+  this.lengthBack--;
+  this.pointerBack++;
+  return temp;
 };
 
 DoubleStack.prototype.pushFront = function(value) {
-  // ...
+  if (this.storage[this.pointerFront] && this.pointerFront > this.pointerBack) {
+    this.resize("add");
+  }
+  this.storage[this.pointerFront] = value;
+  this.lengthFront++;
+  this.pointerFront++;
 };
 
 DoubleStack.prototype.popFront = function() {
-  // ...
+  if (this.length() / 2 <= this.length) {
+    this.resize("remove");
+  }
+  var temp = this.storage[this.pointerFront];
+  this.storage[this.pointerFront] = undefined;
+  this.lengthFront--;
+  this.pointerFront--;
+  return temp;
+};
+
+DoubleStack.prototype.length = function() {
+  return this.lengthFront + this.lengthBack;
+};
+
+DoubleStack.prototype.resize = function(direction) {
+  if (!direction) {
+    return;
+  }
+
+  // Logic for increase or decreasing new array size
+  let tempStorage;
+  if (direction === "add") {
+    if (this.capacity * 2 > this.maxCapacity) {
+      return;
+    }
+    this.capacity *= 2;
+    tempStorage = new Array(this.capacity);
+  } else if (direction === "remove") {
+    if (this.capacity / 2 < this.minCapacity) {
+      return;
+    }
+    this.capacity /= 2;
+    tempStorage = new Array(this.capacity);
+  }
+
+  // Logic for copying over old array given pointer
+  for (let i = 0; i < this.lengthFront; i++) {
+    tempStorage[i] = this.storage[i];
+  }
+
+  for(let j = 0)
+
+
+  this.storage = tempStorage;
 };
