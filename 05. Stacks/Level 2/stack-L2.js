@@ -79,6 +79,21 @@ DoubleStack.prototype.length = function() {
 };
 
 
+DoubleStack.prototype.toArray = function() {
+  var result = [];
+
+  for (let i=0; i<this.lengthFront; i++) {
+    result.push(this.storage[i]);
+  }
+
+  for (let i=this.lengthBack; i<this.storage.length;i++) {
+    result.push(this.storage[i]);
+  }
+
+  return result;
+};
+
+
 var dd = new DoubleStack(8);
 dd.push(1);
 dd.push(2);
