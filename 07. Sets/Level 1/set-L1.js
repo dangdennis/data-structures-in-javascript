@@ -1,5 +1,3 @@
-
-
 /*
 
  Set is a mathematical construct that holds unique values.
@@ -21,9 +19,6 @@
 
  */
 
-
-
-
 /*
   A Set is a data structure that holds any non-repeating values.  The order of values
    isn't usually important though some implementations my require ordering.  The
@@ -44,10 +39,10 @@
    and check for the existence of a value.
 
     [*] Pre-allocate storage as required.  It cannot be altered after creation
-    [ ] Maintain length.  Do not allow the number of insert to exceed capacity
-    [ ] .add() function to insert an item into the Set if it doesn't already exist
-    [ ] .remove() function to remove an item from the Set if it exists
-    [ ] .isMember() function to return whether the value exists in the Set
+    [x] Maintain length.  Do not allow the number of insert to exceed capacity
+    [x] .add() function to insert an item into the Set if it doesn't already exist
+    [x] .remove() function to remove an item from the Set if it exists
+    [x] .isMember() function to return whether the value exists in the Set
 
   NOTE: Do not use built-in functions to ease the pain
   NOTE: Do not allow duplicates in any one set.
@@ -55,22 +50,39 @@
 */
 
 var Set = function(capacity) {
-  this.storage = { };
+  this.storage = {};
   this.length = 0;
   this.max = capacity || 10;
 };
 
-
 Set.prototype.add = function(value) {
-  // ...
+  if(this.length + 1 > this.max) {
+    throw new Error('Hey, you\'ve already reached the max!');
+  }
+  this.storage[value] = value;
+  this.length++;
 };
-
 
 Set.prototype.remove = function(value) {
-  // ...
+  if(!this.storage[value]) {
+    throw new Error('Hey, there isn\'t anything to remove!');
+  }
+  delete this.storage[value];
+  this.length--;
 };
-
 
 Set.prototype.isMember = function(value) {
-  // ...
+  var isMember = this.storage[value] ? true : false;
+  return isMember;
 };
+
+var s = new Set(10);
+s.add('1');
+s.add('2');
+s.add('3');
+console.log(s.storage);
+s.remove('1');
+console.log(s.storage);
+console.log(s.length);
+console.log('isMember',s.isMember('2'))
+
