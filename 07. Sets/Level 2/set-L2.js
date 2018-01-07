@@ -1,4 +1,3 @@
-
 /*
   Previously, you implemented a simple Set.  Sets are fundamentally quite simple, and they
    come up in discrete mathematics a lot during formal studies of computer science.  We can
@@ -76,13 +75,13 @@
 
   Your objective is extend your previous set with the various boolean operations.
 
-    [ ] Implement Set object with static storage
-    [ ] .add() function to add values
-    [ ] .remove() function to remove values
-    [ ] .isMember() function to check whether value exists
-    [ ] .union() function to return A union B
-    [ ] .intersect() function to return A intersect B
-    [ ] .difference() function to return A diff B
+    [x] Implement Set object with static storage
+    [x] .add() function to add values
+    [x] .remove() function to remove values
+    [x] .isMember() function to check whether value exists
+    [x] .union() function to return A union B
+    [x] .intersect() function to return A intersect B
+    [x] .difference() function to return A diff B
     [ ] .subset() function to return Is A subset of B?
 
   NOTE: Do not use built-in functions to ease the pain
@@ -93,42 +92,76 @@
 */
 
 var Set = function(capacity) {
-  this.storage = { };
+  this.storage = {};
   this.length = 0;
   this.max = capacity || 10;
 };
 
-
 Set.prototype.add = function(value) {
-  // ...
+  if (this.length + 1 > this.max) {
+    throw new Error("Hey, you've already reached the max!");
+  }
+  this.storage[value] = value;
+  this.length++;
 };
-
 
 Set.prototype.remove = function(value) {
-  // ...
+  if (!this.storage[value]) {
+    throw new Error("Hey, there isn't anything to remove!");
+  }
+  delete this.storage[value];
+  this.length--;
 };
-
 
 Set.prototype.isMember = function(value) {
-  // ...
+  var isMember = this.storage[value] ? true : false;
+  return isMember;
 };
-
 
 Set.prototype.union = function(B) {
-  // ...
+  for (key in B) {
+    this.storage[key] = B[key];
+  }
+  return this.storage;
 };
-
 
 Set.prototype.intersect = function(B) {
-  // ...
+  var intersected = {};
+  for (key in B) {
+    if (this.storage.hasOwnProperty(key)) {
+      intersected[key] = key;
+    }
+  }
+  this.storage = intersected;
+  return this.storage;
 };
-
 
 Set.prototype.difference = function(B) {
-  // ...
+  for(keys in B) {
+    if(this.storage.hasOwnProperty(keys)) {
+      delete B[keys];
+    }
+  }
+  this.storage = B;
+  return this.storage;
 };
-
 
 Set.prototype.isSubset = function(B) {
-  // ...
+  // for(keys in this.storage) {
+
+  // }
 };
+
+var B = { 4: "4", 5: "5", 6: "6" };
+var A = { 1: "1", 2: "2" };
+
+var s = new Set(10);
+s.add("1");
+s.add("2");
+s.add("3");
+s.add("4");
+console.log(s.storage);
+// s.union(B);
+// s.intersect(s.intersect(A));
+s.difference(B);
+console.log(s.storage);
