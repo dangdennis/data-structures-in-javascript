@@ -19,12 +19,12 @@
    same vector, but attach an alternate resize() function with the new copy behavior.
    Or, alternately, devise your own new dynamic array scheme.
 
-    [ ] Complete the implementation of a DoubleStack class
-    [ ] .storage property to hold the items on the stack using a dynamic array (or
+    [x] Complete the implementation of a DoubleStack class
+    [x] .storage property to hold the items on the stack using a dynamic array (or
           vector).
-    [ ] .push() function to push a value from the back
-    [ ] .pop() function to push a value from the back
-    [ ] .pushFront() function to push a value from the front
+    [x] .push() function to push a value from the back
+    [x] .pop() function to push a value from the back
+    [x] .pushFront() function to push a value from the front
     [ ] .popFront() function to push a value from the front
     [ ] .length property to return the total size used
 
@@ -44,49 +44,66 @@
 
 */
 
-var DoubleStack = function(initialCapacity, maxCapacity) {
-  this.storage = []; // Change to dynamic array or vector
+let DoubleStack = function(initialCapacity, maxCapacity) {
+  this.storage = new Array(initialCapacity || 16); // Change to dynamic array or vector
+  this.min = this.storage.length || 8; // default to 8
   this.max = maxCapacity || 1 << 5; // max = 32
-  this.min = initialCapacity || 8; // default to 8
   this.lengthFront = 0;
   this.lengthBack = 0;
 };
 
 DoubleStack.prototype.push = function(value) {
-  // if (this.storage[this.pointerBack] && this.pointerBack < this.pointerFront) {
-  //   this.resize("add");
-  // }
-  this.storage[this.lengthBack++] = value;
+  if (this.storage[this.lengthBack] && this.lengthBack >= this.lengthFront) {
+    this.resize("add");
+  }
+  // Convert length to index aka position
+  let position = this.storage.length - 1 - this.lengthBack;
+  this.storage[position] = value;
+  this.lengthBack++;
 };
 
 DoubleStack.prototype.pop = function() {
-  var lengthCheck = 0;
-  // if (lengthCheck / 2 <= this.length) {
-  //   this.resize("remove");
-  // }
-  var temp = this.storage[this.lengthBack];
-  this.storage[this.lengthBack--] = undefined;
+  let totalLength = this.lengthBack + this.lengthFront;
+  if (totalLength <= this.storage.length / 2) {
+    this.resize("remove");
+  }
+  // Allows user to pop items without ever using .push, 
+  // i.e. popping when items have been only added via pushFront()
+  this.lengthBack = this.lengthBack > 0 ? this.lengthBack : 1;
+  let position = this.storage.length - this.lengthBack;
+  let temp = this.storage[position];
+  delete this.storage[position];
+  this.lengthBack--;
+  // Allows users to always push starting at 0 if none are added
+  if (this.lengthBack < 0) {
+    this.lengthBack = 0;
+  }
   return temp;
 };
 
 DoubleStack.prototype.pushFront = function(value) {
-  if (this.storage[this.lengthFront] && this.lengthFront > this.lengthBack) {
+  if (this.storage[this.lengthFront] && this.lengthFront >= this.lengthBack) {
     this.resize("add");
   }
   this.storage[this.lengthFront++] = value;
 };
 
 DoubleStack.prototype.popFront = function() {
-  // if (this.length() / 2 <= this.length) {
-  //   this.resize("remove");
-  // }
-  var temp = this.storage[this.pointerFront];
-  this.storage[this.lengthFront--] = undefined;
+  let totalLength = this.lengthBack + this.lengthFront;
+  if (totalLength <= this.storage.length / 2) {
+    this.resize("remove");
+  }
+   // Allows user to popFront items without ever using .pushFront, 
+  // i.e. popFront'ing when items have only been added via push
+  let position = this.lengthFront - 1 >= 0 ? this.lengthFront - 1 : 0;
+  let temp = this.storage[position];
+  delete this.storage[position];
+  this.lengthFront--;
+  // Allows users to always pushFront starting at 0 if none are added
+  if (this.lengthFront < 0) {
+    this.lengthFront = 0;
+  }
   return temp;
-};
-
-DoubleStack.prototype.length = function() {
-  return this.lengthFront + this.lengthBack;
 };
 
 DoubleStack.prototype.resize = function(direction) {
@@ -97,31 +114,73 @@ DoubleStack.prototype.resize = function(direction) {
   // Logic for increase or decreasing new array size
   let tempStorage;
   if (direction === "add") {
-    if (this.capacity * 2 > this.maxCapacity) {
-      return;
+    if (this.storage.length * 2 > this.max) {
+      throw new Error("Exceeding max capacity parameter!");
     }
-    this.capacity *= 2;
-    tempStorage = new Array(this.capacity);
+    let newCapacity = this.storage.length * 2;
+    tempStorage = new Array(newCapacity);
+
+    // Resizing logic
+    for (let i = 0; i < this.lengthFront; i++) {
+      tempStorage[i] = this.storage[i];
+    }
+    let backPointer = this.storage.length - 1;
+    for (let j = tempStorage.length - 1; j > tempStorage.length - 1 - this.lengthBack; j--, backPointer--) {
+      tempStorage[j] = this.storage[backPointer];
+    }
   } else if (direction === "remove") {
-    if (this.capacity / 2 < this.minCapacity) {
-      return;
+    if (this.storage.length / 2 <= this.min - 1) {
+      throw new Error("Cannot reduce below minimum capacity parameter!");
     }
-    this.capacity /= 2;
-    tempStorage = new Array(this.capacity);
+    let newCapacity = this.storage.length / 2;
+    tempStorage = new Array(newCapacity);
+
+    for (let i = 0, j = 0; i < this.storage.length; i++) {
+      if (this.storage[i] !== undefined) {
+        tempStorage[j] = this.storage[i];
+        j++;
+      }
+    }
   }
-
-  // Logic for copying over old array given pointer
-  for (let i = 0; i < this.lengthFront; i++) {
-    tempStorage[i] = this.storage[i];
-  }
-
-  for(let j = this.pointerBack; i < )
-
 
   this.storage = tempStorage;
 };
 
+let dd = new DoubleStack(8);
 
+dd.push(1);
+dd.push(2);
+dd.push(3);
+dd.push(4);
+dd.push(5);
+dd.push(6);
+dd.push(7);
+dd.push(8);
+dd.pushFront(9);
+dd.pushFront(10);
+dd.pushFront(11);
+dd.pushFront(12);
+dd.pushFront(13);
+dd.pushFront(14);
+dd.pushFront(15);
+dd.pushFront(16);
+console.log(dd.storage);
+dd.pop();
+dd.pop();
+dd.pop();
+dd.pop();
+dd.pop();
+dd.pop();
+dd.pop();
+dd.pop();
+dd.pop();
+// dd.push(1000);
+console.log(dd.storage);
+// console.log(dd.storage.length);
+// let r1 = dd.pop();
+// console.log(r1);
+// let r2 = dd.popFront();
+// console.log(r2);
 
 /*
 
