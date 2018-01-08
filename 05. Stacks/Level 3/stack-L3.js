@@ -49,49 +49,39 @@ var DoubleStack = function(initialCapacity, maxCapacity) {
   this.max = maxCapacity || 1 << 5; // max = 32
   this.min = initialCapacity || 8; // default to 8
   this.lengthFront = 0;
-  this.pointerFront = 0;
   this.lengthBack = 0;
-  this.pointerBack = initialCapacity - 1;
 };
 
 DoubleStack.prototype.push = function(value) {
-  if (this.storage[this.pointerBack] && this.pointerBack < this.pointerFront) {
-    this.resize("add");
-  }
-  this.storage[this.pointerBack] = value;
-  this.lengthBack++;
-  this.pointerBack--;
+  // if (this.storage[this.pointerBack] && this.pointerBack < this.pointerFront) {
+  //   this.resize("add");
+  // }
+  this.storage[this.lengthBack++] = value;
 };
 
 DoubleStack.prototype.pop = function() {
   var lengthCheck = 0;
-  if (lengthCheck / 2 <= this.length) {
-    this.resize("remove");
-  }
-  var temp = this.storage[this.pointerBack];
-  this.storage[this.pointerBack] = undefined;
-  this.lengthBack--;
-  this.pointerBack++;
+  // if (lengthCheck / 2 <= this.length) {
+  //   this.resize("remove");
+  // }
+  var temp = this.storage[this.lengthBack];
+  this.storage[this.lengthBack--] = undefined;
   return temp;
 };
 
 DoubleStack.prototype.pushFront = function(value) {
-  if (this.storage[this.pointerFront] && this.pointerFront > this.pointerBack) {
+  if (this.storage[this.lengthFront] && this.lengthFront > this.lengthBack) {
     this.resize("add");
   }
-  this.storage[this.pointerFront] = value;
-  this.lengthFront++;
-  this.pointerFront++;
+  this.storage[this.lengthFront++] = value;
 };
 
 DoubleStack.prototype.popFront = function() {
-  if (this.length() / 2 <= this.length) {
-    this.resize("remove");
-  }
+  // if (this.length() / 2 <= this.length) {
+  //   this.resize("remove");
+  // }
   var temp = this.storage[this.pointerFront];
-  this.storage[this.pointerFront] = undefined;
-  this.lengthFront--;
-  this.pointerFront--;
+  this.storage[this.lengthFront--] = undefined;
   return temp;
 };
 
@@ -125,7 +115,7 @@ DoubleStack.prototype.resize = function(direction) {
     tempStorage[i] = this.storage[i];
   }
 
-  for(let j = 0)
+  for(let j = this.pointerBack; i < )
 
 
   this.storage = tempStorage;

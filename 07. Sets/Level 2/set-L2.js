@@ -137,8 +137,8 @@ Set.prototype.intersect = function(B) {
 };
 
 Set.prototype.difference = function(B) {
-  for(keys in B) {
-    if(this.storage.hasOwnProperty(keys)) {
+  for (keys in B) {
+    if (this.storage.hasOwnProperty(keys)) {
       delete B[keys];
     }
   }
@@ -147,9 +147,12 @@ Set.prototype.difference = function(B) {
 };
 
 Set.prototype.isSubset = function(B) {
-  // for(keys in this.storage) {
-
-  // }
+  for (keys in this.storage) {
+    if (!B.hasOwnProperty(keys)) {
+      return false;
+    }
+  }
+  return true;
 };
 
 var B = { 4: "4", 5: "5", 6: "6" };
@@ -158,10 +161,11 @@ var A = { 1: "1", 2: "2" };
 var s = new Set(10);
 s.add("1");
 s.add("2");
-s.add("3");
-s.add("4");
+// s.add("3");
+// s.add("4");
 console.log(s.storage);
 // s.union(B);
 // s.intersect(s.intersect(A));
-s.difference(B);
+// s.difference(B);
 console.log(s.storage);
+console.log(s.isSubset(A))
