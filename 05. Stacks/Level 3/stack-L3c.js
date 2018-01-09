@@ -1,4 +1,3 @@
-
 /*
   Continued from stack-L3b.js
 
@@ -26,3 +25,62 @@
   NOTE: Start with a copy of your implementation from stack-L3b.js
 
 */
+
+const DoublyLinkedList = function() {
+  this.head = null;
+  this.tail = null;
+  // this.frontHead = null;
+  // this.frontTail = null;
+  // this.backHead = null;
+  // this.backTail = null;
+  this.frontLength = 0;
+  this.backLength = 0;
+};
+
+const DoublyLinkedListNode = function(payload, next, prev) {
+  this.payload = payload;
+  this.next = next || null;
+  this.prev = prev || null;
+};
+
+const DoubleStack = function() {
+  this.storage = new DoublyLinkedList();
+  this.lengthFront = 0;
+  this.lengthBack = 0;
+};
+
+DoubleStack.prototype.push = {
+  front: function(payload) {
+    // First node
+    if (this.storage.head === null || this.storage.tail === null) {
+      this.storage.head = this.storage.tail = new DoublyLinkedListNode(payload);
+    }
+    // Adding subsequent nodes to the tail
+    if (this.storage.tail !== null) {
+      const newNode = new DoublyLinkedListNode(payload);
+      newNode.prev = this.storage.tail;
+      this.storage.tail.next = newNode;
+      this.lengthFront++;
+    }
+  },
+  back: function() {
+    // First node
+    if (this.storage.head === null || this.storage.tail === null) {
+      this.storage.head = this.storage.tail = new DoublyLinkedListNode(payload);
+    }
+    
+  }
+};
+
+DoubleStack.prototype.pop = {
+  front: function() {},
+  back: function() {}
+};
+
+DoubleStack.prototype.length = {
+  front: function() {},
+  back: function() {},
+  size: function() {
+    return this.frontLength + this.backLength;
+  }
+};
