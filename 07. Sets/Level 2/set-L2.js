@@ -119,31 +119,34 @@ Set.prototype.isMember = function(value) {
 };
 
 Set.prototype.union = function(B) {
+  const union = {};
   for (key in B) {
-    this.storage[key] = B[key];
+    union[key] = B[key];
   }
-  return this.storage;
+  for (key in this.storage) {
+    union[key] = this.storage[key];
+  }
+  return union;
 };
 
 Set.prototype.intersect = function(B) {
-  var intersected = {};
+  const intersection = {};
   for (key in B) {
     if (this.storage.hasOwnProperty(key)) {
-      intersected[key] = key;
+      intersection[key] = key;
     }
   }
-  this.storage = intersected;
-  return this.storage;
+  return intersection;
 };
 
 Set.prototype.difference = function(B) {
-  for (keys in B) {
+  const difference = {...B};
+  for (keys in difference) {
     if (this.storage.hasOwnProperty(keys)) {
-      delete B[keys];
+      delete difference[keys];
     }
   }
-  this.storage = B;
-  return this.storage;
+  return difference;
 };
 
 Set.prototype.isSubset = function(B) {
@@ -166,6 +169,6 @@ s.add("2");
 console.log(s.storage);
 // s.union(B);
 // s.intersect(s.intersect(A));
-// s.difference(B);
+console.log(s.difference(B));
 console.log(s.storage);
-console.log(s.isSubset(A))
+// console.log(s.isSubset(A))

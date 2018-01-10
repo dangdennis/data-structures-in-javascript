@@ -29,10 +29,6 @@
 const DoublyLinkedList = function() {
   this.head = null;
   this.tail = null;
-  // this.frontHead = null;
-  // this.frontTail = null;
-  // this.backHead = null;
-  // this.backTail = null;
   this.frontLength = 0;
   this.backLength = 0;
 };
@@ -49,38 +45,79 @@ const DoubleStack = function() {
   this.lengthBack = 0;
 };
 
-DoubleStack.prototype.push = {
-  front: function(payload) {
-    // First node
-    if (this.storage.head === null || this.storage.tail === null) {
-      this.storage.head = this.storage.tail = new DoublyLinkedListNode(payload);
-    }
-    // Adding subsequent nodes to the tail
-    if (this.storage.tail !== null) {
+DoubleStack.prototype.push = () => {
+  const self = this;
+  return {
+    front: function(payload) {
+      // First node
+      if (self.storage.head === null || self.storage.tail === null) {
+        self.storage.head = self.storage.tail = new DoublyLinkedListNode(payload);
+        self.frontLength++;
+        return;
+      }
+      // Adding subsequent nodes to the head / front of the list
       const newNode = new DoublyLinkedListNode(payload);
-      newNode.prev = this.storage.tail;
-      this.storage.tail.next = newNode;
-      this.lengthFront++;
+      newNode.next = self.storage.head;
+      self.storage.head.pre = newNode;
+      self.storage.head = newNode;
+      self.frontLength++;
+    },
+    back: function(payload) {
+      // First node
+      if (self.storage.head === null || self.storage.tail === null) {
+        self.storage.head = self.storage.tail = new DoublyLinkedListNode(payload);
+        self.backLength++;
+        return;
+      }
+      const newNode = new DoublyLinkedList(payload);
+      newNode.prev = self.storage.tail;
+      self.storage.tail.next = newNode;
+      self.storage.tail = newNode;
+      self.backLength++;
     }
-  },
-  back: function() {
-    // First node
-    if (this.storage.head === null || this.storage.tail === null) {
-      this.storage.head = this.storage.tail = new DoublyLinkedListNode(payload);
-    }
-    
-  }
+  };
 };
 
-DoubleStack.prototype.pop = {
-  front: function() {},
-  back: function() {}
+DoubleStack.prototype.pop = () => {
+  const self = this;
+  return {
+    front: function() {
+      if (self.storage.head !== null) {
+        const temp = self.storage.head;
+        self.storage.head.next.prev = null;
+        self.storage.head = self.storage.head.next;
+        self.frontLength--;
+        return temp;
+      }
+    },
+    back: function() {
+      if (self.storage.tail !== null) {
+        const temp = self.storage.tail;
+        self.storage.tail.prev.next = null;
+        self.storage.tail = self.storage.tail.prev;
+        self.backLength--;
+        return temp;
+      }
+    }
+  };
 };
 
-DoubleStack.prototype.length = {
-  front: function() {},
-  back: function() {},
-  size: function() {
-    return this.frontLength + this.backLength;
+DoubleStack.prototype.length = () => {
+  const self = this;
+  return {
+    front: function() {
+      return self.frontLength;
+    },
+    back: function() {
+      return self.backLength;
+    },
+    size: function() {
+      return self.frontLength + self.backLength;
+    }
   }
+  
 };
+
+var ds = new DoubleStack();
+var push = ds.push();
+push.front("first");
