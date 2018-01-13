@@ -1,4 +1,3 @@
-
 /*
   Hash Tables are extremely useful in computer science (and technical interviews).  They
    allow us to gain the advantages of array-like random access but with non-integers
@@ -75,13 +74,17 @@ var HashTable = function() {
 //          yes?  overwrite the existing value
 //
 HashTable.prototype.set = function(key, value) {
-  var bucketIndex = this.hasher(key);
+  const bucketIndex = this.hasher(key);
+  if(this.table[bucketIndex] === undefined) {
+    const bucket = [{[key]: value}]
+    return;
+  }
+  
 
   // Your code here ...
 
   return this;
 };
-
 
 // Algorithm of a get (which is also called a retrieve)
 //
@@ -93,11 +96,10 @@ HashTable.prototype.set = function(key, value) {
 //   Yes? return value
 //
 HashTable.prototype.get = function(key) {
-  var bucketIndex = this.hasher(key)
+  var bucketIndex = this.hasher(key);
 
   // ...
 };
-
 
 // Algorithm of a remove (which is also called delete)
 //
@@ -114,7 +116,6 @@ HashTable.prototype.remove = function(key) {
   // ...
 };
 
-
 HashTable.prototype.toString = function() {
   // ...
 };
@@ -123,27 +124,23 @@ HashTable.prototype.hasher = function(key) {
   return key.toString().length % this.length;
 };
 
-
-
-
-
 (function() {
   var hash = new HashTable();
 
   hash.set("Alex Hawkins", "510-599-1930");
-//hash.toString();
-//[ , , , [ [ 'Alex Hawkins', '510-599-1930' ] ] ]
+  //hash.toString();
+  //[ , , , [ [ 'Alex Hawkins', '510-599-1930' ] ] ]
 
-  hash.set('Boo Radley', '520-589-1970');
-//hash.toString();
-//[ , [ [ 'Boo Radley', '520-589-1970' ] ], , [ [ 'Alex Hawkins', '510-599-1930' ] ] ]
+  hash.set("Boo Radley", "520-589-1970");
+  //hash.toString();
+  //[ , [ [ 'Boo Radley', '520-589-1970' ] ], , [ [ 'Alex Hawkins', '510-599-1930' ] ] ]
 
   hash
-    .set('Vance Carter', '120-589-1970')
-    .set('Rick Mires', '520-589-1970')
-    .set('Tom Bradey', '520-589-1970')
-    .set('Biff Tanin', '520-589-1970');
-//hash.retrieveAll();
+    .set("Vance Carter", "120-589-1970")
+    .set("Rick Mires", "520-589-1970")
+    .set("Tom Bradey", "520-589-1970")
+    .set("Biff Tanin", "520-589-1970");
+  //hash.retrieveAll();
   /*
    [ ,
    [ [ 'Boo Radley', '520-589-1970' ],
@@ -156,13 +153,13 @@ HashTable.prototype.hasher = function(key) {
    [ [ 'Biff Tanin', '520-589-1970' ] ] ]
    */
 
-//overide example (Phone Number Change)
-//
+  //overide example (Phone Number Change)
+  //
   hash
-    .set('Rick Mires', '650-589-1970')
-    .set('Tom Bradey', '818-589-1970')
-    .set('Biff Tanin', '987-589-1970');
-//hash.toString();
+    .set("Rick Mires", "650-589-1970")
+    .set("Tom Bradey", "818-589-1970")
+    .set("Biff Tanin", "987-589-1970");
+  //hash.toString();
 
   /*
    [ ,
@@ -179,7 +176,7 @@ HashTable.prototype.hasher = function(key) {
 
   hash.remove("Rick Mires");
   hash.remove("Tom Bradey");
-//hash.toString();
+  //hash.toString();
 
   /*
    [ ,
@@ -194,17 +191,14 @@ HashTable.prototype.hasher = function(key) {
    */
 
   hash
-    .set('Dick Mires', '650-589-1970')
-    .set('Lam James', '818-589-1970')
-    .set('Ricky Ticky Tavi', '987-589-1970');
-//hash.toString();
+    .set("Dick Mires", "650-589-1970")
+    .set("Lam James", "818-589-1970")
+    .set("Ricky Ticky Tavi", "987-589-1970");
+  //hash.toString();
 
-
-  console.log(hash.get('Lam James'));  //818-589-1970
-  console.log(hash.get('Dick Mires')); //650-589-1970
-  console.log(hash.get('Ricky Ticky Tavi')); //987-589-1970
-  console.log(hash.get('Alex Hawkins')); //510-599-1930
-  console.log(hash.get('Lebron James')); //null
+  console.log(hash.get("Lam James")); //818-589-1970
+  console.log(hash.get("Dick Mires")); //650-589-1970
+  console.log(hash.get("Ricky Ticky Tavi")); //987-589-1970
+  console.log(hash.get("Alex Hawkins")); //510-599-1930
+  console.log(hash.get("Lebron James")); //null
 });
-
-
