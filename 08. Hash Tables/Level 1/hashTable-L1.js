@@ -54,9 +54,10 @@
 
 */
 
-var HashTable = function() {
+var HashTable = function(capacity) {
   this.table = [];
   this.length = 0;
+  this.capacity = capacity || 8;
 };
 
 // Algorithm of an set (which is also an insert)
@@ -121,7 +122,7 @@ HashTable.prototype.toString = function() {
 };
 
 HashTable.prototype.hasher = function(key) {
-  return key.toString().length % this.length;
+  return key.toString().length % this.capacity;
 };
 
 (function() {
