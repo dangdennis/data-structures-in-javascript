@@ -55,9 +55,9 @@
 */
 
 var HashTable = function(capacity) {
-  this.table = [];
-  this.length = 0;
   this.capacity = capacity || 8;
+  this.table = new Array(this.capacity);
+  this.length = 0;
 };
 
 // Algorithm of an set (which is also an insert)
@@ -75,15 +75,27 @@ var HashTable = function(capacity) {
 //          yes?  overwrite the existing value
 //
 HashTable.prototype.set = function(key, value) {
+  // Compute the hash from the key into bucketIndex
   const bucketIndex = this.hasher(key);
-  if(this.table[bucketIndex] === undefined) {
-    const bucket = [{[key]: value}]
-    return;
+  // Check for present bucket
+  if (this.table[bucketIndex] === undefined) {
+    // If bucket not in use, create bucket with entry at hashed (bucket) index
+    var bucket = [];
+    bucket.push({ [key]: value });
+    this.table[bucketIndex] = bucket;
+    this.length++;
+  } else {
+    // If bucket present, make reference variable to that bucket
+    const bucket = this.table[bucketIndex];
+    // If previous key exists, overwrite
+    if (bucket.hasOwnProperty(key)) {
+      bucket[key] = value;
+    } else {
+      // Push to the end of the bucket if new entry
+      bucket.push({ [key]: value });
+      this.length++;
+    }
   }
-  
-
-  // Your code here ...
-
   return this;
 };
 
@@ -98,8 +110,28 @@ HashTable.prototype.set = function(key, value) {
 //
 HashTable.prototype.get = function(key) {
   var bucketIndex = this.hasher(key);
-
-  // ...
+  // If the bucket exists
+  if (this.table[bucketIndex] !== undefined) {
+    const bucket = this.table[bucketIndex];
+    if (bucket !== undefined) {
+      // loop through bucket to find the correct entry
+      // for(let i = 0; i < bucket.length; i++) {
+      //   if(bucket[i].hasOwnProperty(key)) {
+      //     return bucket[i][key];
+      //   }
+      // }
+      var entry = bucket.filter(entry => {
+        if(entry.hasOwnProperty(key)) {
+          return true;
+        }
+      })
+      return entry.length > 0 ? entry[0][key] : null;
+    } else {
+      throw new Error("No such entry");
+    }
+  } else {
+    throw new Error("No such entry");
+  }
 };
 
 // Algorithm of a remove (which is also called delete)
@@ -202,4 +234,4 @@ HashTable.prototype.hasher = function(key) {
   console.log(hash.get("Ricky Ticky Tavi")); //987-589-1970
   console.log(hash.get("Alex Hawkins")); //510-599-1930
   console.log(hash.get("Lebron James")); //null
-});
+})();
