@@ -36,10 +36,10 @@
 
     1. [x] HashTable class
     2. [x] .hasher() hash function to convert key into index
-    3. [ ] .set() function to add or set entries
-    4. [ ] .get() function to get entries
-    5. [ ] Collision resolution using the _chaining_ technique
-    6. [ ] .remove() function to remove entries
+    3. [x] .set() function to add or set entries
+    4. [x] .get() function to get entries
+    5. [x] Collision resolution using the _chaining_ technique
+    6. [x] .remove() function to remove entries
 
   BONUS:
 
@@ -85,16 +85,19 @@ HashTable.prototype.set = function(key, value) {
     this.table[bucketIndex] = bucket;
     this.length++;
   } else {
-    // If bucket present, make reference variable to that bucket
+    // If bucket present, make reference to that bucket
     const bucket = this.table[bucketIndex];
-    // If previous key exists, overwrite
-    if (bucket.hasOwnProperty(key)) {
-      bucket[key] = value;
-    } else {
-      // Push to the end of the bucket if new entry
-      bucket.push({ [key]: value });
-      this.length++;
+    // Loop through bucket
+    for (let i = 0; i < bucket.length; i++) {
+      // if previous key exists, overwrite
+      if (bucket[i].hasOwnProperty(key)) {
+        bucket[i][key] = value;
+        return this;
+      }
     }
+    // Push to the end of the bucket if new entry
+    bucket.push({ [key]: value });
+    this.length++;
   }
   return this;
 };
@@ -114,23 +117,17 @@ HashTable.prototype.get = function(key) {
   if (this.table[bucketIndex] !== undefined) {
     const bucket = this.table[bucketIndex];
     if (bucket !== undefined) {
-      // loop through bucket to find the correct entry
-      // for(let i = 0; i < bucket.length; i++) {
-      //   if(bucket[i].hasOwnProperty(key)) {
-      //     return bucket[i][key];
-      //   }
-      // }
-      var entry = bucket.filter(entry => {
-        if(entry.hasOwnProperty(key)) {
-          return true;
+      for (let i = 0; i < bucket.length; i++) {
+        if (bucket[i].hasOwnProperty(key)) {
+          return bucket[i][key];
         }
-      })
-      return entry.length > 0 ? entry[0][key] : null;
+      }
+      return null;
     } else {
-      throw new Error("No such entry");
+      return null;
     }
   } else {
-    throw new Error("No such entry");
+    return null;
   }
 };
 
@@ -145,12 +142,52 @@ HashTable.prototype.get = function(key) {
 //
 HashTable.prototype.remove = function(key) {
   var bucketIndex = this.hasher(key);
-
-  // ...
+  if (this.table[bucketIndex] !== undefined) {
+    const bucket = this.table[bucketIndex];
+    let entryPosition;
+    for (let i = 0; i < bucket.length; i++) {
+      if (bucket[i].hasOwnProperty(key)) {
+        entryPosition = i;
+        break;
+      }
+    }
+    let removedEntry = bucket.splice(entryPosition, 1);
+    this.length--;
+    return removedEntry;
+  } else {
+    return null;
+  }
 };
 
 HashTable.prototype.toString = function() {
-  // ...
+  // var newTable = [];
+  // for (let i = 0; i < this.table.length; i++) {
+  //   const bucket = this.table[i];
+  //   if(!bucket) {
+  //     newTable.push([])
+  //     continue;
+  //   }
+  //   const newBucket = [];
+  //   for (let j = 0; j < bucket.length; j++) {
+  //     if (bucket[j] !== undefined) {
+  //       const stringified = JSON.stringify(bucket[j]);
+  //       newBucket.push(stringified);
+  //     } else {
+  //       newBucket.push("");
+  //     }
+  //   }
+  //   newTable.push(newBucket);
+  // }
+  const tableToString = this.table.map(bucket => {
+    if (bucket == undefined) {
+      return [];
+    }
+    return bucket.map(entry => {
+      return JSON.stringify(entry);
+    });
+  });
+  console.log(tableToString);
+  return tableToString;
 };
 
 HashTable.prototype.hasher = function(key) {
@@ -161,11 +198,11 @@ HashTable.prototype.hasher = function(key) {
   var hash = new HashTable();
 
   hash.set("Alex Hawkins", "510-599-1930");
-  //hash.toString();
+  hash.toString();
   //[ , , , [ [ 'Alex Hawkins', '510-599-1930' ] ] ]
 
   hash.set("Boo Radley", "520-589-1970");
-  //hash.toString();
+  hash.toString();
   //[ , [ [ 'Boo Radley', '520-589-1970' ] ], , [ [ 'Alex Hawkins', '510-599-1930' ] ] ]
 
   hash
@@ -192,7 +229,6 @@ HashTable.prototype.hasher = function(key) {
     .set("Rick Mires", "650-589-1970")
     .set("Tom Bradey", "818-589-1970")
     .set("Biff Tanin", "987-589-1970");
-  //hash.toString();
 
   /*
    [ ,
@@ -228,7 +264,7 @@ HashTable.prototype.hasher = function(key) {
     .set("Lam James", "818-589-1970")
     .set("Ricky Ticky Tavi", "987-589-1970");
   //hash.toString();
-
+  console.log("final set of logs");
   console.log(hash.get("Lam James")); //818-589-1970
   console.log(hash.get("Dick Mires")); //650-589-1970
   console.log(hash.get("Ricky Ticky Tavi")); //987-589-1970

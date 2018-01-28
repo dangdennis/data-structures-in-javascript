@@ -1,5 +1,17 @@
+/*
+Tree = like a file system,
+Root = only one node at the lowest level
+Binary tree = left < data, right > data
+Height == "how many levels of children", root = height of 1 
+By knowing height, you can know your time complexity
+Unbalanced tree = result of adding sorted data -- O(height), best case O(log n)
+Deleting in a binary search tree means re-attaching the heigher level children from the removed node
+to new places -- done easily with recursion
 
+Tree ~= linked list, with multiple children/next, and also a single directional graph
 
+DAG = directed acyclic graph
+*/
 
 // Implement
 //
@@ -8,7 +20,6 @@
 //   4. [ ] remove node functionality
 //   3. [ ] contains node functionality
 //
-
 
 function Node(data) {
   this.data = data;
@@ -23,40 +34,33 @@ Tree.prototype.add = function(data, parent) {
   // Your code here
 };
 
-
 Tree.prototype.remove = function(data) {
   // Your code here
 };
-
 
 Tree.prototype.contains = function(data) {
   // Your code here
 };
 
-
 Tree.prototype.printEachNode = function() {
-  if(!this.root) {
-    return console.log('No root node found');
+  if (!this.root) {
+    return console.log("No root node found");
   }
 
   // Your code here
 };
 
-
-
-
 var tree = new Tree();
-tree.add('ceo');
-tree.add('cto', 'ceo');
-tree.add('dev1', 'cto');
-tree.add('dev2', 'cto');
-tree.add('dev3', 'cto');
-tree.add('cfo', 'ceo');
-tree.add('accountant', 'cfo');
-tree.add('cmo', 'ceo');
+tree.add("ceo");
+tree.add("cto", "ceo");
+tree.add("dev1", "cto");
+tree.add("dev2", "cto");
+tree.add("dev3", "cto");
+tree.add("cfo", "ceo");
+tree.add("accountant", "cfo");
+tree.add("cmo", "ceo");
 tree.printEachNode(); // => ceo | cto cfo cmo | dev1 dev2 dev3 accountant
-tree.remove('cmo');
+tree.remove("cmo");
 tree.printEachNode(); // => ceo | cto cfo | dev1 dev2 dev3 accountant
-tree.remove('cfo');
+tree.remove("cfo");
 tree.printEachNode(); // => ceo | cto | dev1 dev2 dev3
-
