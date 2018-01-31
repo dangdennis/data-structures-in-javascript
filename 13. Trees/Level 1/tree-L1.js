@@ -17,9 +17,9 @@ DAG = directed acyclic graph
 // Implement
 //
 //   1. [x] Tree class
-//   2. [ ] add node functionality
-//   4. [ ] remove node functionality
-//   3. [ ] contains node functionality
+//   2. [x] add node functionality
+//   4. [x] remove node functionality
+//   3. [x] contains node functionality
 //
 
 function Node(data) {
@@ -29,70 +29,105 @@ function Node(data) {
 
 function Tree() {
   this.root = null;
+  this.count = 0;
 }
 
 Tree.prototype.add = function(data, parent) {
   const node = new Node(data);
-  
-  if(parent !== null) {
+  if (parent !== null) {
     parent.children.push(node);
+    this.count++;
     return node;
   } else {
     this.root = node;
+    return node;
   }
 };
 
 Tree.prototype.remove = function(data) {
-  
+  var rootNode = this.root;
+  var drillAndRemove = function(node) {
+    for (let i = 0; i < node.children.length; i++) {
+      var child = node.children[i];
+      if (data === child.data) {
+        node.children.splice(i, 1);
+        this.count--;
+        return child;
+      }
+      drillAndRemove(child);
+    }
+  };
+  drillAndRemove(rootNode);
+  return null;
 };
 
 Tree.prototype.contains = function(data) {
-  // Your code here
-};
-
-Tree.prototype.find = function(data){
   var found = false;
-  var subroutine = function(node){
-    if ( node.data === data ){
+  var subroutine = function(node) {
+    if (node.data === data) {
       found = true;
-      return node;
+      return found;
     }
-    for ( var i = 0; i < node.children.length; i++ ){
+    for (var i = 0; i < node.children.length; i++) {
       var child = node.children[i];
       subroutine(child);
     }
-  }
+  };
   subroutine(this);
   return found;
 };
-  
 
-  if ( !this.children ){ return; }
-  for ( var i = 0; i < this.children.length; i++ ){
-    var child = this.children[i];
-    child.traverse.call(child);
-  }
+Tree.prototype.find = function(data) {
+  var found = null;
+  var drillAndFind = function(node) {
+    if (node.data === data) {
+      found = node;
+      return found;
+    }
+    for (var i = 0; i < node.children.length; i++) {
+      var child = node.children[i];
+      drillAndFind(child);
+    }
+  };
+  drillAndFind(this);
+  return found;
+};
+
+Tree.prototype.count = function() {
+  console.log("count", this.count);
+  return this.count;
 };
 
 Tree.prototype.printEachNode = function() {
   if (!this.root) {
     return console.log("No root node found");
   }
-
-  // Your code here
+  var drillAndPrint = function(node, height) {
+    // height = height || 0;
+    // height++;
+    // How can I increment and decrement height?
+    console.log(node);
+    for (let i = 0; i < node.children.length; i++) {
+      var child = node.children[i];
+      drillAndPrint(child, height);
+    }
+  };
+  drillAndPrint(this.root);
+  console.log("----------------------");
 };
 
 var tree = new Tree();
-// tree.add("ceo");
-// tree.add("cto", "ceo");
-// tree.add("dev1", "cto");
-// tree.add("dev2", "cto");
-// tree.add("dev3", "cto");
-// tree.add("cfo", "ceo");
-// tree.add("accountant", "cfo");
-// tree.add("cmo", "ceo");
-// tree.printEachNode(); // => ceo | cto cfo cmo | dev1 dev2 dev3 accountant
-// tree.remove("cmo");
-// tree.printEachNode(); // => ceo | cto cfo | dev1 dev2 dev3 accountant
-// tree.remove("cfo");
-// tree.printEachNode(); // => ceo | cto | dev1 dev2 dev3
+console.log("tree.root", tree.root);
+var ceo = tree.add("ceo", tree.root);
+var cto = tree.add("cto", ceo);
+var dev1 = tree.add("dev1", cto);
+var dev2 = tree.add("dev2", cto);
+var dev3 = tree.add("dev3", cto);
+var cfo = tree.add("cfo", ceo);
+var acct = tree.add("accountant", cfo);
+var cmo = tree.add("cmo", ceo);
+tree.printEachNode(); // => ceo | cto cfo cmo | dev1 dev2 dev3 accountant
+var cmo = tree.remove("cmo");
+tree.printEachNode(); // => ceo | cto cfo | dev1 dev2 dev3 accountant
+var cfo = tree.remove("cfo");
+tree.printEachNode(); // => ceo | cto | dev1 dev2 dev3
